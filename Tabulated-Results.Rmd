@@ -2,7 +2,7 @@
 title: "Tabulating Results of Simulation Study"
 author: "Michael Flanagin  \\ flanna@uw.edu"
 date: "7/11/2018"
-classoption: landscape
+classoption: portrait
 header-includes:
   - \usepackage{xcolor}
 output:
@@ -27,7 +27,7 @@ bibliography: references.bib
   library(bibtex)
 ```
 
-```{r globalopts, echo = FALSE}
+```{r globalopts, cache = TRUE, warning = FALSE, echo = FALSE}
 # Load libraries necessary for functions used in this document
 library('knitr')
 library('xtable')
@@ -234,7 +234,9 @@ tbl1_power <- cbind( tbl1_power_adj_sort[,c(5:9)],
 ```{r batch-1-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 .col.names = c("n", "bZ", "bX", "Pr( Y )", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
 .caption = "Binary Y, binary X: Coverage probability, n = 32";
-.align = c(rep("c", 5), rep("r", 8))
+.align = c(rep("c", 5), rep("r", 8));
+.header.randomization.method = c(" " = 5, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
+.header.analysis.method = c(" " = 5, "Model-based" = 6, "Rerandomization" = 2);
 tbl1_coverage %>%
   # TODO(MICHAEL): format table with colors in .pdf, not HTML format (as below)!
   # mutate_if( is.numeric, function( x ){
@@ -243,19 +245,49 @@ tbl1_coverage %>%
   #             font_size =  spec_font_size( x ) )
   # }) %>%
 kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
-  kable_styling( latex_options = c("striped", "bordered"), full_width = FALSE ) %>%
-  add_header_above(c(" " = 5, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2)) %>%
-  add_header_above(c(" " = 5, "Model-based" = 6, "Rerandomization" = 2))
+  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  add_header_above( .header.randomization.method ) %>%
+  add_header_above( .header.analysis.method )
 ```
 
 \newpage
 ```{r batch-1-bias-table, cache = TRUE, echo = FALSE, results='asis'}
-kable( tbl1_bias, row.names = FALSE, format = "latex", caption = "Binary Y, binary X: Bias, n = 32" )
+.col.names = c("n", "bZ", "bX", "Pr( Y )", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
+.caption = "Binary Y, binary X: Bias, n = 32";
+.align = c(rep("c", 5), rep("r", 8));
+.header.randomization.method = c(" " = 5, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
+.header.analysis.method = c(" " = 5, "Model-based" = 6, "Rerandomization" = 2);
+tbl1_bias %>%
+  # TODO(MICHAEL): format table with colors in .pdf, not HTML format (as below)!
+  # mutate_if( is.numeric, function( x ){
+  #   cell_spec( x, bold = TRUE,
+  #             color = spec_color( x, end = 0.9 ),
+  #             font_size =  spec_font_size( x ) )
+  # }) %>%
+kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
+  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  add_header_above( .header.randomization.method ) %>%
+  add_header_above( .header.analysis.method )
 ```
 
 \newpage
 ```{r batch-1-power-table, cache = TRUE, echo = FALSE, results='asis'}
-kable( tbl1_power, row.names = FALSE, format = "latex", caption = "Binary Y, binary X: Power, n = 32" )
+.col.names = c("n", "bZ", "bX", "Pr( Y )", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
+.caption = "Binary Y, binary X: Power, n = 32";
+.align = c(rep("c", 5), rep("r", 8));
+.header.randomization.method = c(" " = 5, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
+.header.analysis.method = c(" " = 5, "Model-based" = 6, "Rerandomization" = 2);
+tbl1_power %>%
+  # TODO(MICHAEL): format table with colors in .pdf, not HTML format (as below)!
+  # mutate_if( is.numeric, function( x ){
+  #   cell_spec( x, bold = TRUE,
+  #             color = spec_color( x, end = 0.9 ),
+  #             font_size =  spec_font_size( x ) )
+  # }) %>%
+kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
+  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  add_header_above( .header.randomization.method ) %>%
+  add_header_above( .header.analysis.method )
 ```
 
 \newpage
@@ -421,17 +453,63 @@ tbl2_power <- cbind( tbl2_power_adj_sort[,c(5:8)],
 ```
 
 ```{r batch-2-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
-kable( tbl2_coverage, row.names = FALSE, format = "latex", caption = "Binary Y, continuous X: Coverage probability" )
+.col.names = c("n", "bZ", "bX", "Pr( Y )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
+.caption = "Binary Y, continuous X: Coverage probability";
+.align = c(rep("c", 4), rep("r", 8));
+.header.randomization.method = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
+.header.analysis.method = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
+tbl2_coverage %>%
+  # TODO(MICHAEL): format table with colors in .pdf, not HTML format (as below)!
+  # mutate_if( is.numeric, function( x ){
+  #   cell_spec( x, bold = TRUE,
+  #             color = spec_color( x, end = 0.9 ),
+  #             font_size =  spec_font_size( x ) )
+  # }) %>%
+kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
+  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  add_header_above( .header.randomization.method ) %>%
+  add_header_above( .header.analysis.method )
 ```
 
 \newpage
 ```{r batch-2-bias-table, cache = TRUE, echo = FALSE, results='asis'}
-kable( tbl2_bias, row.names = FALSE, format = "latex", caption = "Binary Y, continuous X: Bias" )
+.col.names = c("n", "bZ", "bX", "Pr( Y )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
+.caption = "Binary Y, continuous X: Bias";
+.align = c(rep("c", 4), rep("r", 8));
+.header.randomization.method = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
+.header.analysis.method = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
+tbl2_bias %>%
+  # TODO(MICHAEL): format table with colors in .pdf, not HTML format (as below)!
+  # mutate_if( is.numeric, function( x ){
+  #   cell_spec( x, bold = TRUE,
+  #             color = spec_color( x, end = 0.9 ),
+  #             font_size =  spec_font_size( x ) )
+  # }) %>%
+kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
+  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  add_header_above( .header.randomization.method ) %>%
+  add_header_above( .header.analysis.method )
 ```
 
 \newpage
 ```{r batch-2-power-table, cache = TRUE, echo = FALSE, results='asis'}
-kable( tbl2_power, row.names = FALSE, format = "latex", caption = "Binary Y, continuous X: Power" )
+.col.names = c("n", "bZ", "bX", "Pr( Y )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
+.caption = "Binary Y, continuous X: Power";
+.align = c(rep("c", 4), rep("r", 8));
+.header.randomization.method = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
+.header.analysis.method = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
+tbl2_power %>%
+  # TODO(MICHAEL): format table with colors in .pdf, not HTML format (as below)!
+  # mutate_if( is.numeric, function( x ){
+  #   cell_spec( x, bold = TRUE,
+  #             color = spec_color( x, end = 0.9 ),
+  #             font_size =  spec_font_size( x ) )
+  # }) %>%
+kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
+  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  add_header_above( .header.randomization.method ) %>%
+  add_header_above( .header.analysis.method )
+
 ```
 
 \newpage
@@ -593,17 +671,62 @@ tbl3_power <- cbind( tbl3_power_adj_sort[,c(5:8)],
 ```
 
 ```{r batch-3-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
-kable( tbl3_coverage, row.names = FALSE, format = "latex", caption = "Continuous Y, binary X: Coverage probability" )
+.col.names = c("n", "bZ", "bX", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
+.caption = "Continuous Y, binary X: Coverage probability";
+.align = c(rep("c", 4), rep("r", 8));
+.header.randomization.method = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
+.header.analysis.method = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
+tbl3_coverage %>%
+  # TODO(MICHAEL): format table with colors in .pdf, not HTML format (as below)!
+  # mutate_if( is.numeric, function( x ){
+  #   cell_spec( x, bold = TRUE,
+  #             color = spec_color( x, end = 0.9 ),
+  #             font_size =  spec_font_size( x ) )
+  # }) %>%
+kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
+  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  add_header_above( .header.randomization.method ) %>%
+  add_header_above( .header.analysis.method )
 ```
 
 \newpage
 ```{r batch-3-bias-table, cache = TRUE, echo = FALSE, results='asis'}
-kable( tbl3_bias, row.names = FALSE, format = "latex", caption = "Continuous Y, binary X: Bias" )
+.col.names = c("n", "bZ", "bX", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
+.caption = "Continuous Y, binary X: Bias";
+.align = c(rep("c", 4), rep("r", 8));
+.header.randomization.method = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
+.header.analysis.method = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
+tbl3_bias %>%
+  # TODO(MICHAEL): format table with colors in .pdf, not HTML format (as below)!
+  # mutate_if( is.numeric, function( x ){
+  #   cell_spec( x, bold = TRUE,
+  #             color = spec_color( x, end = 0.9 ),
+  #             font_size =  spec_font_size( x ) )
+  # }) %>%
+kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
+  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  add_header_above( .header.randomization.method ) %>%
+  add_header_above( .header.analysis.method )
 ```
 
 \newpage
 ```{r batch-3-power-table, cache = TRUE, echo = FALSE, results='asis'}
-kable( tbl3_power, row.names = FALSE, format = "latex", caption = "Continuous Y, binary X: Power" )
+.col.names = c("n", "bZ", "bX", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
+.caption = "Continuous Y, binary X: Power";
+.align = c(rep("c", 4), rep("r", 8));
+.header.randomization.method = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
+.header.analysis.method = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
+tbl3_power %>%
+  # TODO(MICHAEL): format table with colors in .pdf, not HTML format (as below)!
+  # mutate_if( is.numeric, function( x ){
+  #   cell_spec( x, bold = TRUE,
+  #             color = spec_color( x, end = 0.9 ),
+  #             font_size =  spec_font_size( x ) )
+  # }) %>%
+kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
+  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  add_header_above( .header.randomization.method ) %>%
+  add_header_above( .header.analysis.method )
 ```
 
 \newpage
@@ -765,16 +888,61 @@ tbl4_power <- cbind( tbl4_power_adj_sort[,c(5:7)],
 ```
 
 ```{r batch-4-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
-kable( tbl4_coverage, row.names = FALSE, format = "latex", caption = "Continuous Y, continuous X: Coverage probability" )
+.col.names = c("n", "bZ", "bX", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
+.caption = "Continuous Y, continuous X: Coverage probability";
+.align = c(rep("c", 3), rep("r", 8));
+.header.randomization.method = c(" " = 3, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
+.header.analysis.method = c(" " = 3, "Model-based" = 6, "Rerandomization" = 2);
+tbl4_coverage %>%
+  # TODO(MICHAEL): format table with colors in .pdf, not HTML format (as below)!
+  # mutate_if( is.numeric, function( x ){
+  #   cell_spec( x, bold = TRUE,
+  #             color = spec_color( x, end = 0.9 ),
+  #             font_size =  spec_font_size( x ) )
+  # }) %>%
+kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
+  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  add_header_above( .header.randomization.method ) %>%
+  add_header_above( .header.analysis.method )
 ```
 
 \newpage
 ```{r batch-4-bias-table, cache = TRUE, echo = FALSE, results='asis'}
-kable( tbl4_bias, row.names = FALSE, format = "latex", caption = "Continuous Y, continuous X: Bias" )
+.col.names = c("n", "bZ", "bX", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
+.caption = "Continuous Y, continuous X: Bias";
+.align = c(rep("c", 3), rep("r", 8));
+.header.randomization.method = c(" " = 3, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
+.header.analysis.method = c(" " = 3, "Model-based" = 6, "Rerandomization" = 2);
+tbl4_bias %>%
+  # TODO(MICHAEL): format table with colors in .pdf, not HTML format (as below)!
+  # mutate_if( is.numeric, function( x ){
+  #   cell_spec( x, bold = TRUE,
+  #             color = spec_color( x, end = 0.9 ),
+  #             font_size =  spec_font_size( x ) )
+  # }) %>%
+kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
+  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  add_header_above( .header.randomization.method ) %>%
+  add_header_above( .header.analysis.method )
 ```
 
 \newpage
 ```{r batch-4-power-table, cache = TRUE, echo = FALSE, results='asis'}
-kable( tbl4_power, row.names = FALSE, format = "latex", caption = "Continuous Y, continuous X: Power" )
+.col.names = c("n", "bZ", "bX", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
+.caption = "Continuous Y, continuous X: Power";
+.align = c(rep("c", 3), rep("r", 8));
+.header.randomization.method = c(" " = 3, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
+.header.analysis.method = c(" " = 3, "Model-based" = 6, "Rerandomization" = 2);
+tbl4_power %>%
+  # TODO(MICHAEL): format table with colors in .pdf, not HTML format (as below)!
+  # mutate_if( is.numeric, function( x ){
+  #   cell_spec( x, bold = TRUE,
+  #             color = spec_color( x, end = 0.9 ),
+  #             font_size =  spec_font_size( x ) )
+  # }) %>%
+kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
+  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  add_header_above( .header.randomization.method ) %>%
+  add_header_above( .header.analysis.method )
 ```
 
