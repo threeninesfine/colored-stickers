@@ -4,7 +4,7 @@ author: "Michael Flanagin  \\ flanna@uw.edu"
 date: "7/11/2018"
 classoption: portrait
 header-includes:
-  - \usepackage{xcolor}
+  - \usepackage[table]{xcolor}
 output:
   pdf_document:
     fig_caption: yes
@@ -39,8 +39,11 @@ opts_chunk$set(echo = FALSE,     # do NOT repeat code in final document
                warning = FALSE,  # do NOT print warnings
                self.contained = TRUE ) # do NOT call other .Rnw docs! 
 round_digits <- 3  # digits to round to when presenting results
-options( knitr.table.format = "latex",  # guarantees 'kableExtra' formatting handled properly
-         knitr.kable.na = " - ")  # replaces NA entries with ' - ' in kable output
+options( knitr.table.format = "latex")  # guarantees 'kableExtra' formatting handled properly
+options( scipen = 999 )
+#         knitr.kable.na = " - ", 
+#         scipen = 10)  # replaces NA entries with ' - ' in kable output
+#         scipen = 999 )  # effectively disables scientific notation
 ```
 
 ```{r load_datasets, cache = TRUE, echo = FALSE}
@@ -64,7 +67,6 @@ From our discussion on 10 July 2018,
 * Section 2 (in progress): Investigate if bias is related to simulation realizations with complete separation
     + i.e. all/no events in one treatment group (or strata, in the case of adjusted effects)
     + Histograms of treatment effect estimates $\hat{\beta}_Z$ by indicator that $SE(\hat{\beta}_Z)$ greater than 1000.
-
 
 \newpage
 # Batch 1: Binary outcome (Y), binary prognostic factors (X) {-}
@@ -235,6 +237,7 @@ tbl1_power <- cbind( tbl1_power_adj_sort[,c(5:9)],
 .col.names = c("n", "bZ", "bX", "Pr( Y )", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
 .caption = "Binary Y, binary X: Coverage probability, n = 32";
 .align = c(rep("c", 5), rep("r", 8));
+.latex_options = c("striped", "bordered", "hold_position")
 .header.randomization.method = c(" " = 5, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method = c(" " = 5, "Model-based" = 6, "Rerandomization" = 2);
 tbl1_coverage %>%
@@ -245,7 +248,7 @@ tbl1_coverage %>%
   #             font_size =  spec_font_size( x ) )
   # }) %>%
 kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
-  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  kable_styling( latex_options = .latex_options, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method ) %>%
   add_header_above( .header.analysis.method )
 ```
@@ -255,6 +258,7 @@ kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .a
 .col.names = c("n", "bZ", "bX", "Pr( Y )", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
 .caption = "Binary Y, binary X: Bias, n = 32";
 .align = c(rep("c", 5), rep("r", 8));
+.latex_options = c("striped", "bordered", "hold_position")
 .header.randomization.method = c(" " = 5, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method = c(" " = 5, "Model-based" = 6, "Rerandomization" = 2);
 tbl1_bias %>%
@@ -265,7 +269,7 @@ tbl1_bias %>%
   #             font_size =  spec_font_size( x ) )
   # }) %>%
 kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
-  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  kable_styling( latex_options = .latex_options, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method ) %>%
   add_header_above( .header.analysis.method )
 ```
@@ -275,6 +279,7 @@ kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .a
 .col.names = c("n", "bZ", "bX", "Pr( Y )", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
 .caption = "Binary Y, binary X: Power, n = 32";
 .align = c(rep("c", 5), rep("r", 8));
+.latex_options = c("striped", "bordered", "hold_position")
 .header.randomization.method = c(" " = 5, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method = c(" " = 5, "Model-based" = 6, "Rerandomization" = 2);
 tbl1_power %>%
@@ -285,7 +290,7 @@ tbl1_power %>%
   #             font_size =  spec_font_size( x ) )
   # }) %>%
 kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
-  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  kable_styling( latex_options = .latex_options, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method ) %>%
   add_header_above( .header.analysis.method )
 ```
@@ -456,6 +461,7 @@ tbl2_power <- cbind( tbl2_power_adj_sort[,c(5:8)],
 .col.names = c("n", "bZ", "bX", "Pr( Y )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
 .caption = "Binary Y, continuous X: Coverage probability";
 .align = c(rep("c", 4), rep("r", 8));
+.latex_options = c("striped", "bordered", "hold_position")
 .header.randomization.method = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
 tbl2_coverage %>%
@@ -466,7 +472,7 @@ tbl2_coverage %>%
   #             font_size =  spec_font_size( x ) )
   # }) %>%
 kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
-  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  kable_styling( latex_options = .latex_options, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method ) %>%
   add_header_above( .header.analysis.method )
 ```
@@ -476,6 +482,7 @@ kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .a
 .col.names = c("n", "bZ", "bX", "Pr( Y )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
 .caption = "Binary Y, continuous X: Bias";
 .align = c(rep("c", 4), rep("r", 8));
+.latex_options = c("striped", "bordered", "hold_position")
 .header.randomization.method = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
 tbl2_bias %>%
@@ -486,7 +493,7 @@ tbl2_bias %>%
   #             font_size =  spec_font_size( x ) )
   # }) %>%
 kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
-  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  kable_styling( latex_options = .latex_options, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method ) %>%
   add_header_above( .header.analysis.method )
 ```
@@ -496,6 +503,7 @@ kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .a
 .col.names = c("n", "bZ", "bX", "Pr( Y )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
 .caption = "Binary Y, continuous X: Power";
 .align = c(rep("c", 4), rep("r", 8));
+.latex_options = c("striped", "bordered", "hold_position")
 .header.randomization.method = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
 tbl2_power %>%
@@ -506,7 +514,7 @@ tbl2_power %>%
   #             font_size =  spec_font_size( x ) )
   # }) %>%
 kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
-  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  kable_styling( latex_options = .latex_options, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method ) %>%
   add_header_above( .header.analysis.method )
 
@@ -674,6 +682,7 @@ tbl3_power <- cbind( tbl3_power_adj_sort[,c(5:8)],
 .col.names = c("n", "bZ", "bX", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
 .caption = "Continuous Y, binary X: Coverage probability";
 .align = c(rep("c", 4), rep("r", 8));
+.latex_options = c("striped", "bordered", "hold_position")
 .header.randomization.method = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
 tbl3_coverage %>%
@@ -684,7 +693,7 @@ tbl3_coverage %>%
   #             font_size =  spec_font_size( x ) )
   # }) %>%
 kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
-  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  kable_styling( latex_options = .latex_options, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method ) %>%
   add_header_above( .header.analysis.method )
 ```
@@ -694,6 +703,7 @@ kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .a
 .col.names = c("n", "bZ", "bX", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
 .caption = "Continuous Y, binary X: Bias";
 .align = c(rep("c", 4), rep("r", 8));
+.latex_options = c("striped", "bordered", "hold_position")
 .header.randomization.method = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
 tbl3_bias %>%
@@ -704,7 +714,7 @@ tbl3_bias %>%
   #             font_size =  spec_font_size( x ) )
   # }) %>%
 kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
-  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  kable_styling( latex_options = .latex_options, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method ) %>%
   add_header_above( .header.analysis.method )
 ```
@@ -714,6 +724,7 @@ kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .a
 .col.names = c("n", "bZ", "bX", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
 .caption = "Continuous Y, binary X: Power";
 .align = c(rep("c", 4), rep("r", 8));
+.latex_options = c("striped", "bordered", "hold_position")
 .header.randomization.method = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
 tbl3_power %>%
@@ -724,7 +735,7 @@ tbl3_power %>%
   #             font_size =  spec_font_size( x ) )
   # }) %>%
 kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
-  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  kable_styling( latex_options = .latex_options, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method ) %>%
   add_header_above( .header.analysis.method )
 ```
@@ -891,6 +902,7 @@ tbl4_power <- cbind( tbl4_power_adj_sort[,c(5:7)],
 .col.names = c("n", "bZ", "bX", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
 .caption = "Continuous Y, continuous X: Coverage probability";
 .align = c(rep("c", 3), rep("r", 8));
+.latex_options = c("striped", "bordered", "hold_position");
 .header.randomization.method = c(" " = 3, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method = c(" " = 3, "Model-based" = 6, "Rerandomization" = 2);
 tbl4_coverage %>%
@@ -901,7 +913,7 @@ tbl4_coverage %>%
   #             font_size =  spec_font_size( x ) )
   # }) %>%
 kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
-  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  kable_styling( latex_options = .latex_options, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method ) %>%
   add_header_above( .header.analysis.method )
 ```
@@ -911,6 +923,7 @@ kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .a
 .col.names = c("n", "bZ", "bX", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
 .caption = "Continuous Y, continuous X: Bias";
 .align = c(rep("c", 3), rep("r", 8));
+.latex_options = c("striped", "bordered", "hold_position")
 .header.randomization.method = c(" " = 3, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method = c(" " = 3, "Model-based" = 6, "Rerandomization" = 2);
 tbl4_bias %>%
@@ -921,7 +934,7 @@ tbl4_bias %>%
   #             font_size =  spec_font_size( x ) )
   # }) %>%
 kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
-  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  kable_styling( latex_options = .latex_options, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method ) %>%
   add_header_above( .header.analysis.method )
 ```
@@ -931,6 +944,7 @@ kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .a
 .col.names = c("n", "bZ", "bX", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
 .caption = "Continuous Y, continuous X: Power";
 .align = c(rep("c", 3), rep("r", 8));
+.latex_options = c("striped", "bordered", "hold_position");
 .header.randomization.method = c(" " = 3, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method = c(" " = 3, "Model-based" = 6, "Rerandomization" = 2);
 tbl4_power %>%
@@ -941,7 +955,7 @@ tbl4_power %>%
   #             font_size =  spec_font_size( x ) )
   # }) %>%
 kable( row.names = FALSE, col.names = .col.names, caption = .caption, align = .align, booktabs = TRUE) %>%
-  kable_styling( latex_options = c("striped", "bordered", "hold_position"), full_width = FALSE ) %>%
+  kable_styling( latex_options = .latex_options, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method ) %>%
   add_header_above( .header.analysis.method )
 ```
