@@ -363,22 +363,22 @@ tbl1_power <- cbind( tbl1_power_adj_sort[,c(5:9)],
 <!-- BATCH 1 of 4, SUBSETTING ON VALID DRAWS --> 
 ```{r batch-1-subset-binY-binX_coverage, cache = TRUE, echo = FALSE}
 #' Adjusted analysis
-tbl1sub1_cov_adj <- subset( metrics_bybx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub1_cov_adj <- subset( metrics_bybx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CR" & rerandomized == 0 & adjusted == 1 ) )
-tbl1sub2_cov_adj <- subset( metrics_bybx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub2_cov_adj <- subset( metrics_bybx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "SBR" & rerandomized == 0 & adjusted == 1 ) )
-tbl1sub3_cov_adj <- subset( metrics_bybx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub3_cov_adj <- subset( metrics_bybx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 0 & adjusted == 1 ) )
-tbl1sub4_cov_adj <- subset( metrics_bybx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub4_cov_adj <- subset( metrics_bybx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 1 & adjusted == 1 ) )
 #' Unadjusted analysis
-tbl1sub1_cov_un <- subset( metrics_bybx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub1_cov_un <- subset( metrics_bybx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CR" & rerandomized == 0 & adjusted == 0 ) )
-tbl1sub2_cov_un <- subset( metrics_bybx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub2_cov_un <- subset( metrics_bybx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "SBR" & rerandomized == 0 & adjusted == 0 ) )
-tbl1sub3_cov_un <- subset( metrics_bybx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub3_cov_un <- subset( metrics_bybx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 0 & adjusted == 0 ) )
-tbl1sub4_cov_un <- subset( metrics_bybx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub4_cov_un <- subset( metrics_bybx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 1 & adjusted == 0 ) )
 
 #' Table 1a: Coverage (adjusted tx effect)
@@ -401,22 +401,22 @@ dimnames( tbl1sub_coverage_un )[[2]] <- c("CR", "SBR", "CAA_model", "CAA_rerand"
 
 ```{r batch-1-subset-binY-binX_bias, cache = TRUE, echo = FALSE}
 #' Adjusted analysis
-tbl1sub1_bias_adj <- subset( metrics_bybx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub1_bias_adj <- subset( metrics_bybx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CR" & rerandomized == 0 & adjusted == 1 ) )
-tbl1sub2_bias_adj <- subset( metrics_bybx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub2_bias_adj <- subset( metrics_bybx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "SBR" & rerandomized == 0 & adjusted == 1 ) )
-tbl1sub3_bias_adj <- subset( metrics_bybx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub3_bias_adj <- subset( metrics_bybx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 0 & adjusted == 1 ) )
-tbl1sub4_bias_adj <- subset( metrics_bybx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub4_bias_adj <- subset( metrics_bybx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 1 & adjusted == 1 ) )
 #' Unadjusted analysis
-tbl1sub1_bias_un <- subset( metrics_bybx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub1_bias_un <- subset( metrics_bybx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CR" & rerandomized == 0 & adjusted == 0 ) )
-tbl1sub2_bias_un <- subset( metrics_bybx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub2_bias_un <- subset( metrics_bybx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "SBR" & rerandomized == 0 & adjusted == 0 ) )
-tbl1sub3_bias_un <- subset( metrics_bybx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub3_bias_un <- subset( metrics_bybx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 0 & adjusted == 0 ) )
-tbl1sub4_bias_un <- subset( metrics_bybx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub4_bias_un <- subset( metrics_bybx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 1 & adjusted == 0 ) )
 
 #' Table 1a: Coverage (adjusted tx effect)
@@ -439,22 +439,22 @@ dimnames( tbl1sub_bias_un )[[2]] <- c("CR", "SBR", "CAA_model", "CAA_rerand", "n
 
 ```{r batch-1-subset-binY-binX_power, cache = TRUE, echo = FALSE}
 #' Adjusted analysis
-tbl1sub1_power_adj <- subset( metrics_bybx_sub, select = c( power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub1_power_adj <- subset( metrics_bybx_sub, select = c( nsim, power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CR" & rerandomized == 0 & adjusted == 1 ) )
-tbl1sub2_power_adj <- subset( metrics_bybx_sub, select = c( power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub2_power_adj <- subset( metrics_bybx_sub, select = c( nsim, power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "SBR" & rerandomized == 0 & adjusted == 1 ) )
-tbl1sub3_power_adj <- subset( metrics_bybx_sub, select = c( power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub3_power_adj <- subset( metrics_bybx_sub, select = c( nsim, power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 0 & adjusted == 1 ) )
-tbl1sub4_power_adj <- subset( metrics_bybx_sub, select = c( power.rerand, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub4_power_adj <- subset( metrics_bybx_sub, select = c( nsim, power.rerand, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 1 & adjusted == 1 ) )
 #' Unadjusted analysis
-tbl1sub1_power_un <- subset( metrics_bybx_sub, select = c( power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub1_power_un <- subset( metrics_bybx_sub, select = c( nsim, power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CR" & rerandomized == 0 & adjusted == 0 ) )
-tbl1sub2_power_un <- subset( metrics_bybx_sub, select = c( power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub2_power_un <- subset( metrics_bybx_sub, select = c( nsim, power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "SBR" & rerandomized == 0 & adjusted == 0 ) )
-tbl1sub3_power_un <- subset( metrics_bybx_sub, select = c( power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub3_power_un <- subset( metrics_bybx_sub, select = c( nsim, power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 0 & adjusted == 0 ) )
-tbl1sub4_power_un <- subset( metrics_bybx_sub, select = c( power.rerand, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
+tbl1sub4_power_un <- subset( metrics_bybx_sub, select = c( nsim, power.rerand, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 1 & adjusted == 0 ) )
 
 #' Table 1a: Coverage (adjusted tx effect)
@@ -689,22 +689,22 @@ tbl2_power <- cbind( tbl2_power_adj_sort[,c(5:8)],
 <!-- BATCH 2 of 4, SUBSETTING ON VALID DRAWS -->
 ```{r batch-2-subset-binY-contX_coverage, cache = TRUE, echo = FALSE}
 #' Adjusted analysis
-tbl2sub1_cov_adj <- subset( metrics_bycx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub1_cov_adj <- subset( metrics_bycx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CR" & rerandomized == 0 & adjusted == 1 ) )
-tbl2sub2_cov_adj <- subset( metrics_bycx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub2_cov_adj <- subset( metrics_bycx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "SBR" & rerandomized == 0 & adjusted == 1 ) )
-tbl2sub3_cov_adj <- subset( metrics_bycx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub3_cov_adj <- subset( metrics_bycx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 0 & adjusted == 1 ) )
-tbl2sub4_cov_adj <- subset( metrics_bycx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub4_cov_adj <- subset( metrics_bycx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 1 & adjusted == 1 ) )
 #' Unadjusted analysis
-tbl2sub1_cov_un <- subset( metrics_bycx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub1_cov_un <- subset( metrics_bycx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CR" & rerandomized == 0 & adjusted == 0 ) )
-tbl2sub2_cov_un <- subset( metrics_bycx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub2_cov_un <- subset( metrics_bycx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "SBR" & rerandomized == 0 & adjusted == 0 ) )
-tbl2sub3_cov_un <- subset( metrics_bycx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub3_cov_un <- subset( metrics_bycx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 0 & adjusted == 0 ) )
-tbl2sub4_cov_un <- subset( metrics_bycx_sub, select = c( coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub4_cov_un <- subset( metrics_bycx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 1 & adjusted == 0 ) )
 
 #' Table 1a: Coverage (adjusted tx effect)
@@ -729,22 +729,22 @@ dimnames( tbl2sub_coverage_un )[[2]] <- c("CR", "SBR", "CAA_model", "CAA_rerand"
 
 ```{r batch-2-subset-binY-contX_bias, cache = TRUE, echo = FALSE}
 #' Adjusted analysis
-tbl2sub1_bias_adj <- subset( metrics_bycx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub1_bias_adj <- subset( metrics_bycx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CR" & rerandomized == 0 & adjusted == 1 ) )
-tbl2sub2_bias_adj <- subset( metrics_bycx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub2_bias_adj <- subset( metrics_bycx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "SBR" & rerandomized == 0 & adjusted == 1 ) )
-tbl2sub3_bias_adj <- subset( metrics_bycx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub3_bias_adj <- subset( metrics_bycx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 0 & adjusted == 1 ) )
-tbl2sub4_bias_adj <- subset( metrics_bycx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub4_bias_adj <- subset( metrics_bycx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 1 & adjusted == 1 ) )
 #' Unadjusted analysis
-tbl2sub1_bias_un <- subset( metrics_bycx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub1_bias_un <- subset( metrics_bycx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CR" & rerandomized == 0 & adjusted == 0 ) )
-tbl2sub2_bias_un <- subset( metrics_bycx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub2_bias_un <- subset( metrics_bycx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "SBR" & rerandomized == 0 & adjusted == 0 ) )
-tbl2sub3_bias_un <- subset( metrics_bycx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub3_bias_un <- subset( metrics_bycx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 0 & adjusted == 0 ) )
-tbl2sub4_bias_un <- subset( metrics_bycx_sub, select = c( bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub4_bias_un <- subset( metrics_bycx_sub, select = c( nsim, bias, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 1 & adjusted == 0 ) )
 
 #' Table 1a: Coverage (adjusted tx effect)
@@ -768,22 +768,22 @@ dimnames( tbl2sub_bias_un )[[2]] <- c("CR", "SBR", "CAA_model", "CAA_rerand", "n
 
 ```{r batch-2-subset-binY-contX_power, cache = TRUE, echo = FALSE}
 #' Adjusted analysis
-tbl2sub1_power_adj <- subset( metrics_bycx_sub, select = c( power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub1_power_adj <- subset( metrics_bycx_sub, select = c( nsim, power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CR" & rerandomized == 0 & adjusted == 1 ) )
-tbl2sub2_power_adj <- subset( metrics_bycx_sub, select = c( power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub2_power_adj <- subset( metrics_bycx_sub, select = c( nsim, power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "SBR" & rerandomized == 0 & adjusted == 1 ) )
-tbl2sub3_power_adj <- subset( metrics_bycx_sub, select = c( power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub3_power_adj <- subset( metrics_bycx_sub, select = c( nsim, power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 0 & adjusted == 1 ) )
-tbl2sub4_power_adj <- subset( metrics_bycx_sub, select = c( power.rerand, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub4_power_adj <- subset( metrics_bycx_sub, select = c( nsim, power.rerand, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 1 & adjusted == 1 ) )
 #' Unadjusted analysis
-tbl2sub1_power_un <- subset( metrics_bycx_sub, select = c( power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub1_power_un <- subset( metrics_bycx_sub, select = c( nsim, power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CR" & rerandomized == 0 & adjusted == 0 ) )
-tbl2sub2_power_un <- subset( metrics_bycx_sub, select = c( power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub2_power_un <- subset( metrics_bycx_sub, select = c( nsim, power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "SBR" & rerandomized == 0 & adjusted == 0 ) )
-tbl2sub3_power_un <- subset( metrics_bycx_sub, select = c( power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub3_power_un <- subset( metrics_bycx_sub, select = c( nsim, power.pvalue, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 0 & adjusted == 0 ) )
-tbl2sub4_power_un <- subset( metrics_bycx_sub, select = c( power.rerand, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
+tbl2sub4_power_un <- subset( metrics_bycx_sub, select = c( nsim, power.rerand, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 1 & adjusted == 0 ) )
 
 #' Table 1a: Coverage (adjusted tx effect)
@@ -1169,11 +1169,11 @@ tbl4_power <- cbind( tbl4_power_adj_sort[,c(5:7)],
 ## Batch 1: Binary outcome (Y), binary prognostic factors (X) {-}
 ### Complete simulation results (5010 simulations)
 ```{r batch-1-table-settings, cache = TRUE, echo = FALSE, results = 'asis'}
-.col.names.b1 = c("n", "bZ", "bX", "Pr( Y )", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
-.align.b1 = c(rep("c", 5), rep("r", 8));
+.col.names.b1 = c("n", "bZ", "bX", "Pr( Y )", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj");
+.align.b1 = c(rep("c", 5), rep("r", 6), "c");
 .latex_options.b1 = c("striped", "bordered", "hold_position")
-.header.randomization.method.b1 = c(" " = 5, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
-.header.analysis.method.b1 = c(" " = 5, "Model-based" = 6, "Rerandomization" = 2);
+.header.randomization.method.b1 = c(" " = 5, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 1);
+.header.analysis.method.b1 = c(" " = 5, "Model-based" = 6, "Rerandomization" = 1);
 .batch.labels <- paste0("Table ", 1, c("a", "b", "c", "d", "e", "f"), 
                         ": (Binary Y, binary X) ",
                         c("Coverage probability", "Bias", "Power"))
@@ -1181,7 +1181,7 @@ tbl4_power <- cbind( tbl4_power_adj_sort[,c(5:7)],
 ```
 
 ```{r batch-1-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl1_coverage %>%
+tbl1_coverage[, -dim( tbl1_coverage )[2]] %>%
 kable( caption = .batch.labels[ 1 ], row.names = FALSE, 
        col.names = .col.names.b1, align = .align.b1, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
@@ -1191,7 +1191,7 @@ kable( caption = .batch.labels[ 1 ], row.names = FALSE,
 
 \newpage
 ```{r batch-1-bias-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl1_bias %>%
+tbl1_bias[, -dim( tbl1_bias )[2]] %>%
 kable( caption = .batch.labels[ 2 ], row.names = FALSE, 
        col.names = .col.names.b1, align = .align.b1, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
@@ -1201,7 +1201,7 @@ kable( caption = .batch.labels[ 2 ], row.names = FALSE,
 
 \newpage
 ```{r batch-1-power-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl1_power %>%
+tbl1_power[, -dim( tbl1_bias )[2]] %>%
 kable( caption = .batch.labels[ 3 ], row.names = FALSE, 
        col.names = .col.names.b1, align = .align.b1, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
@@ -1212,7 +1212,7 @@ kable( caption = .batch.labels[ 3 ], row.names = FALSE,
 \newpage
 ### Subsetted simulation results (draws without non-complete separation)
 ```{r batch-1-subset-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl1sub_coverage %>%
+tbl1sub_coverage[, -dim( tbl1sub_coverage )[2]] %>%
 kable( caption = .batch.labels[ 4 ], row.names = FALSE, 
        col.names = .col.names.b1, align = .align.b1, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
@@ -1222,7 +1222,7 @@ kable( caption = .batch.labels[ 4 ], row.names = FALSE,
 
 \newpage
 ```{r batch-1-subset-bias-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl1sub_bias %>%
+tbl1sub_bias[, -dim( tbl1sub_bias )[2]] %>%
 kable( caption = .batch.labels[ 5 ], row.names = FALSE, 
        col.names = .col.names.b1, align = .align.b1, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
@@ -1232,7 +1232,7 @@ kable( caption = .batch.labels[ 5 ], row.names = FALSE,
 
 \newpage
 ```{r batch-1-subset-power-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl1sub_power %>%
+tbl1sub_power[, -dim( tbl1sub_power )[2]] %>%
 kable( caption = .batch.labels[ 6 ], row.names = FALSE, 
        col.names = .col.names.b1, align = .align.b1, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
@@ -1244,11 +1244,11 @@ kable( caption = .batch.labels[ 6 ], row.names = FALSE,
 \newpage
 ## Batch 2: Binary outcome (Y), continuous prognostic factors (X) {-}
 ```{r batch-2-table-settings, cache = TRUE, echo = FALSE, results = 'asis'}
-.col.names.b2 = c("n", "bZ", "bX", "Pr( Y )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
-.align.b2 = c(rep("c", 4), rep("r", 8));
+.col.names.b2 = c("n", "bZ", "bX", "Pr( Y )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj");
+.align.b2 = c(rep("c", 4), rep("r", 6), "c");
 .latex_options.b2 = c("striped", "bordered", "hold_position")
-.header.randomization.method.b2 = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
-.header.analysis.method.b2 = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
+.header.randomization.method.b2 = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 1);
+.header.analysis.method.b2 = c(" " = 4, "Model-based" = 6, "Rerandomization" = 1);
 
 .batch.labels <- paste0("Table ", 2, c("a", "b", "c", "d", "e", "f"), 
                         ": (Binary Y, continuous X) ",
@@ -1259,7 +1259,7 @@ kable( caption = .batch.labels[ 6 ], row.names = FALSE,
 
 ### Complete simulation results (5010 simulation draws)
 ```{r batch-2-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl2_coverage %>%
+tbl2_coverage[, -dim( tbl2_coverage )[2]] %>%
 kable( caption = .batch.labels[ 1 ], row.names = FALSE, 
        col.names = .col.names.b2, align = .align.b2, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
@@ -1269,7 +1269,7 @@ kable( caption = .batch.labels[ 1 ], row.names = FALSE,
 
 \newpage
 ```{r batch-2-bias-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl2_bias %>%
+tbl2_bias[, -dim( tbl2_bias )[2]] %>%
 kable( caption = .batch.labels[ 2 ], row.names = FALSE, 
        col.names = .col.names.b2, align = .align.b2, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
@@ -1279,7 +1279,7 @@ kable( caption = .batch.labels[ 2 ], row.names = FALSE,
 
 \newpage
 ```{r batch-2-power-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl2_power %>%
+tbl2_power[, -dim( tbl2_power )[2]] %>%
 kable( caption = .batch.labels[ 3 ], row.names = FALSE, 
        col.names = .col.names.b2, align = .align.b2, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
@@ -1290,7 +1290,7 @@ kable( caption = .batch.labels[ 3 ], row.names = FALSE,
 \newpage
 ### Subsetted simulation results (draws without non-complete separation)
 ```{r batch-2-subset-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl2sub_coverage %>%
+tbl2sub_coverage[, -dim( tbl2sub_coverage )[2]] %>%
 kable( caption = .batch.labels[ 4 ], row.names = FALSE, 
        col.names = .col.names.b2, align = .align.b2, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
@@ -1300,7 +1300,7 @@ kable( caption = .batch.labels[ 4 ], row.names = FALSE,
 
 \newpage
 ```{r batch-2-subset-bias-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl2sub_bias %>%
+tbl2sub_bias[, -dim( tbl2sub_bias )[2]] %>%
 kable( caption = .batch.labels[ 5 ], row.names = FALSE, 
        col.names = .col.names.b2, align = .align.b2, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
@@ -1310,7 +1310,7 @@ kable( caption = .batch.labels[ 5 ], row.names = FALSE,
 
 \newpage
 ```{r batch-2-subset-power-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl2sub_power %>%
+tbl2sub_power[, -dim( tbl2sub_power )[2]] %>%
 kable( caption = .batch.labels[ 6 ], row.names = FALSE, 
        col.names = .col.names.b2, align = .align.b2, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
@@ -1321,11 +1321,11 @@ kable( caption = .batch.labels[ 6 ], row.names = FALSE,
 \newpage
 ## Batch 3: Continuous outcome (Y), binary prognostic factors (X) {-}
 ```{r batch-3-table-settings, cache = TRUE, echo = FALSE, results = 'asis'}
-.col.names.b3 = c("n", "bZ", "bX", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
-.align.b3 = c(rep("c", 4), rep("r", 8));
+.col.names.b3 = c("n", "bZ", "bX", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj");
+.align.b3 = c(rep("c", 4), rep("r", 6), "c");
 .latex_options.b3 = c("striped", "bordered", "hold_position")
-.header.randomization.method.b3 = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
-.header.analysis.method.b3 = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
+.header.randomization.method.b3 = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 1);
+.header.analysis.method.b3 = c(" " = 4, "Model-based" = 6, "Rerandomization" = 1);
 
 .batch.labels <- paste0("Table ", 3, c("a", "b", "c", "d", "e", "f"), 
                         ": (Continuous Y, binary X) ",
@@ -1334,7 +1334,7 @@ kable( caption = .batch.labels[ 6 ], row.names = FALSE,
 ```
 
 ```{r batch-3-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl3_coverage %>%
+tbl3_coverage[, -dim( tbl3_coverage )[2]] %>%
 kable( caption = .batch.labels[ 1 ], row.names = FALSE, 
        col.names = .col.names.b3, align = .align.b3, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b3, full_width = FALSE ) %>%
@@ -1344,7 +1344,7 @@ kable( caption = .batch.labels[ 1 ], row.names = FALSE,
 
 \newpage
 ```{r batch-3-bias-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl3_bias %>%
+tbl3_bias[, -dim( tbl3_bias )[2]] %>%
 kable( caption = .batch.labels[ 2 ], row.names = FALSE, 
        col.names = .col.names.b3, align = .align.b3, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b3, full_width = FALSE ) %>%
@@ -1354,7 +1354,7 @@ kable( caption = .batch.labels[ 2 ], row.names = FALSE,
 
 \newpage
 ```{r batch-3-power-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl3_power %>%
+tbl3_power[, -dim( tbl3_power )[2]] %>%
 kable( caption = .batch.labels[ 3 ], row.names = FALSE, 
        col.names = .col.names.b3, align = .align.b3, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b3, full_width = FALSE ) %>%
@@ -1365,11 +1365,11 @@ kable( caption = .batch.labels[ 3 ], row.names = FALSE,
 \newpage
 ## Batch 4: Continuous outcome (Y), continuous prognostic factors (X) {-}
 ```{r batch-4-table-settings, cache = TRUE, echo = FALSE, results = 'asis'}
-.col.names.b4 = c("n", "bZ", "bX", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj", "unadj");
-.align.b4 = c(rep("c", 3), rep("r", 8));
+.col.names.b4 = c("n", "bZ", "bX", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj");
+.align.b4 = c(rep("c", 3), rep("r", 6), "c");
 .latex_options.b4 = c("striped", "bordered", "hold_position");
-.header.randomization.method.b4 = c(" " = 3, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
-.header.analysis.method.b4 = c(" " = 3, "Model-based" = 6, "Rerandomization" = 2);
+.header.randomization.method.b4 = c(" " = 3, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 1);
+.header.analysis.method.b4 = c(" " = 3, "Model-based" = 6, "Rerandomization" = 1);
 
 .batch.labels <- paste0("Table ", 4, c("a", "b", "c", "d", "e", "f"), 
                         ": (Continuous Y, continuous X) ",
@@ -1378,7 +1378,7 @@ kable( caption = .batch.labels[ 3 ], row.names = FALSE,
 ```
 
 ```{r batch-4-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl4_coverage %>%
+tbl4_coverage[, -dim( tbl4_coverage )[2]] %>%
 kable( caption = .batch.labels[ 1 ], row.names = FALSE, 
        col.names = .col.names.b4, align = .align.b4, booktabs = TRUE, linesep = .linesep ) %>%
   kable_styling( latex_options = .latex_options.b4, full_width = FALSE ) %>%
@@ -1388,7 +1388,7 @@ kable( caption = .batch.labels[ 1 ], row.names = FALSE,
 
 \newpage
 ```{r batch-4-bias-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl4_bias %>%
+tbl4_bias[, -dim( tbl4_bias )[2]] %>%
 kable( caption = .batch.labels[ 2 ], row.names = FALSE, 
        col.names = .col.names.b4, align = .align.b4, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b4, full_width = FALSE ) %>%
@@ -1398,7 +1398,7 @@ kable( caption = .batch.labels[ 2 ], row.names = FALSE,
 
 \newpage
 ```{r batch-4-power-table, cache = TRUE, echo = FALSE, results='asis'}
-tbl4_power %>%
+tbl4_power[, -dim( tbl4_power )[2]] %>%
 kable( caption = .batch.labels[ 3 ], row.names = FALSE, 
        col.names = .col.names.b4, align = .align.b4, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b4, full_width = FALSE ) %>%
