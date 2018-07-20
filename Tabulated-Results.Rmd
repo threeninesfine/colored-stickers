@@ -106,6 +106,70 @@ Suggested modifications:
 * For batches 1 and 2, present complete and subsetted metric table side by side / sequentially (rather than currently: complete results, then subsetted results)
 \newpage
 
+# Comments from Amalia (NEW: 18 July 2018)
+
+OK, fantastic, here are some thoughts on this version.  Try to refer to this email as a checklist and go through each one.
+
+For formatting,
+
+1. Number the tables based on batch number (1a 1b, etc) so can tell where you are in the types of outcomes.
+
+ref1: https://stackoverflow.com/questions/31182147/suppress-automatic-table-name-and-number-in-an-rmd-file-using-xtable-or-knitr
+ref2: https://stackoverflow.com/questions/30679537/get-rid-of-captions-when-using-texreg-in-rmarkdown
+```
+In the YAML section where LaTeX packages can be included, 
+add the caption package:
+
+header-includes:
+    - \usepackage{caption}
+Then at the beginning of the RMarkdown document body add:
+
+\captionsetup[table]{labelformat=empty}
+This removes the caption labels for all tables.
+```
+
+2. Include the proportion of runs included in each row of the tables where you include only draws without non-complete separation
+
+3. Some tables still need scientific notation taken out of the extra large or small numbers.  If #s too big, perhaps can use >999 or something
+
+4. I like the row spacing used to split up the vertical space, you have used every 5 rows, but perhaps split where something changes to make more coherent groups, perhaps every 6 rows where the value of P(X) or P(Y) changes.  Even batch 4 could put a vertical space every 6 rows since sample size changes.
+
+```
+You can add the argument linesep = "" to kable. 
+This will be passed on to kable_latex where it overwrites the default
+
+linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline'
+# Example:
+
+kable(cars, format = "latex", booktabs = TRUE, linesep = "")
+```
+
+5. Sometimes the columns at the right have NA and sometimes just 0 or 1.  I’m assuming when it’s just 0 or 1 that those have not finished running yet, right?
+
+6. Remove far right column for rerandomized and unadjusted.  Do not run these, not part of our aims.
+
+7. Something seems amiss with table 11, some of the columns match exactly.
+
+8. Tables 11 and 12 both say ‘bias’ in heading, but I think second one should be power?
+
+
+For inference,
+
+9. We need to be able to interpret the bias.  So each table should include the true value that was compared to the estimates to compute bias.  I think when we sat down this was log(bZ), not bZ, right? 
+
+10. Here is what I’m seeing in terms of patterns:  Coverage and bias seem potentially reasonable, waiting for some precision, hard to see. 
+
+11. So focusing on power, which is our main objective.  Seems to me that there is actually a benefit in terms of power for re-randomization even in the absence of drift for binary Y; this is seen when comparing CAA rerand adj vs CAA model-based adj. 
+
+12. Secondly with regard to power, when comparing the model based adjusted methods only and ignoring rerandomization, there seems to be no power advantage to using covariate adjusted randomization versus either block or simple randomization.  Do you agree?  Fascinating.
+
+13. How it is going with the other simulations not shown here, batches 1 and 2 with n=96?  Are they running?
+
+
+
+
+
+
 <!-- # Batch 1: Binary outcome (Y), binary prognostic factors (X) {-} -->
 ```{r batch-1-binY-binX_coverage, cache = TRUE, echo = FALSE}
 #' Adjusted analysis
@@ -1084,6 +1148,8 @@ tbl4_power <- cbind( tbl4_power_adj_sort[,c(5:7)],
 .latex_options.b1 = c("striped", "bordered", "hold_position")
 .header.randomization.method.b1 = c(" " = 5, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method.b1 = c(" " = 5, "Model-based" = 6, "Rerandomization" = 2);
+.batch.label <- "Batch 1(a): Binary Y, binary X"
+.batch.sublabels <- c("Coverage probability")
 ```
 
 ```{r batch-1-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
@@ -1180,7 +1246,7 @@ kable( caption = "Binary Y, continuous X: Bias", row.names = FALSE,
 \newpage
 ```{r batch-2-power-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2_power %>%
-kable( caption = "Binary Y, continuous X: Bias", row.names = FALSE, 
+kable( caption = "Binary Y, continuous X: Power", row.names = FALSE, 
        col.names = .col.names.b2, align = .align.b2, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b2 ) %>%
@@ -1211,7 +1277,7 @@ kable( caption = "Binary Y, continuous X: Bias", row.names = FALSE,
 \newpage
 ```{r batch-2-subset-power-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2sub_power %>%
-kable( caption = "Binary Y, continuous X: Bias", row.names = FALSE, 
+kable( caption = "Binary Y, continuous X: Power", row.names = FALSE, 
        col.names = .col.names.b2, align = .align.b2, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b2 ) %>%
