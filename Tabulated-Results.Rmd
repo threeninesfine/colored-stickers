@@ -6,6 +6,7 @@ classoption: portrait
 header-includes:
   - \usepackage[table]{xcolor}
   - \usepackage{booktabs}
+  - \usepackage{caption}
 output:
   pdf_document:
     fig_caption: yes
@@ -20,6 +21,7 @@ output:
 csl: mee.csl
 bibliography: references.bib
 ---
+\captionsetup[table]{ labelformat = empty } <!-- disable auto table numbering with kable -->
 
 ```{r setup, eval = FALSE, echo=FALSE}
   devtools::install_github("cboettig/knitcitations@v1")
@@ -1148,13 +1150,14 @@ tbl4_power <- cbind( tbl4_power_adj_sort[,c(5:7)],
 .latex_options.b1 = c("striped", "bordered", "hold_position")
 .header.randomization.method.b1 = c(" " = 5, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method.b1 = c(" " = 5, "Model-based" = 6, "Rerandomization" = 2);
-.batch.label <- "Batch 1(a): Binary Y, binary X"
-.batch.sublabels <- c("Coverage probability")
+.batch.labels <- paste0("Table ", 1, c("a", "b", "c", "d", "e", "f"), 
+                        ": (Binary Y, binary X) ",
+                        c("Coverage probability", "Bias", "Power"))
 ```
 
 ```{r batch-1-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl1_coverage %>%
-kable( caption = "Binary Y, binary X: Coverage probability", row.names = FALSE, 
+kable( caption = .batch.labels[ 1 ], row.names = FALSE, 
        col.names = .col.names.b1, align = .align.b1, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b1 ) %>%
@@ -1164,7 +1167,7 @@ kable( caption = "Binary Y, binary X: Coverage probability", row.names = FALSE,
 \newpage
 ```{r batch-1-bias-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl1_bias %>%
-kable( caption = "Binary Y, binary X: Bias", row.names = FALSE, 
+kable( caption = .batch.labels[ 2 ], row.names = FALSE, 
        col.names = .col.names.b1, align = .align.b1, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b1 ) %>%
@@ -1174,7 +1177,7 @@ kable( caption = "Binary Y, binary X: Bias", row.names = FALSE,
 \newpage
 ```{r batch-1-power-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl1_power %>%
-kable( caption = "Binary Y, binary X: Power", row.names = FALSE, 
+kable( caption = .batch.labels[ 3 ], row.names = FALSE, 
        col.names = .col.names.b1, align = .align.b1, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b1 ) %>%
@@ -1185,7 +1188,7 @@ kable( caption = "Binary Y, binary X: Power", row.names = FALSE,
 ### Subsetted simulation results (draws without non-complete separation)
 ```{r batch-1-subset-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl1sub_coverage %>%
-kable( caption = "Binary Y, binary X: Coverage probability", row.names = FALSE, 
+kable( caption = .batch.labels[ 4 ], row.names = FALSE, 
        col.names = .col.names.b1, align = .align.b1, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b1 ) %>%
@@ -1195,7 +1198,7 @@ kable( caption = "Binary Y, binary X: Coverage probability", row.names = FALSE,
 \newpage
 ```{r batch-1-subset-bias-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl1sub_bias %>%
-kable( caption = "Binary Y, binary X: Bias", row.names = FALSE, 
+kable( caption = .batch.labels[ 5 ], row.names = FALSE, 
        col.names = .col.names.b1, align = .align.b1, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b1 ) %>%
@@ -1205,7 +1208,7 @@ kable( caption = "Binary Y, binary X: Bias", row.names = FALSE,
 \newpage
 ```{r batch-1-subset-power-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl1sub_power %>%
-kable( caption = "Binary Y, binary X: Power", row.names = FALSE, 
+kable( caption = .batch.labels[ 6 ], row.names = FALSE, 
        col.names = .col.names.b1, align = .align.b1, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b1 ) %>%
@@ -1221,12 +1224,16 @@ kable( caption = "Binary Y, binary X: Power", row.names = FALSE,
 .latex_options.b2 = c("striped", "bordered", "hold_position")
 .header.randomization.method.b2 = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method.b2 = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
+
+.batch.labels <- paste0("Table ", 2, c("a", "b", "c", "d", "e", "f"), 
+                        ": (Binary Y, continuous X) ",
+                        c("Coverage probability", "Bias", "Power"))
 ```
 
 ### Complete simulation results (5010 simulation draws)
 ```{r batch-2-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2_coverage %>%
-kable( caption = "Binary Y, continuous X: Coverage probability", row.names = FALSE, 
+kable( caption = .batch.labels[ 1 ], row.names = FALSE, 
        col.names = .col.names.b2, align = .align.b2, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b2 ) %>%
@@ -1236,7 +1243,7 @@ kable( caption = "Binary Y, continuous X: Coverage probability", row.names = FAL
 \newpage
 ```{r batch-2-bias-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2_bias %>%
-kable( caption = "Binary Y, continuous X: Bias", row.names = FALSE, 
+kable( caption = .batch.labels[ 2 ], row.names = FALSE, 
        col.names = .col.names.b2, align = .align.b2, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b2 ) %>%
@@ -1246,7 +1253,7 @@ kable( caption = "Binary Y, continuous X: Bias", row.names = FALSE,
 \newpage
 ```{r batch-2-power-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2_power %>%
-kable( caption = "Binary Y, continuous X: Power", row.names = FALSE, 
+kable( caption = .batch.labels[ 3 ], row.names = FALSE, 
        col.names = .col.names.b2, align = .align.b2, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b2 ) %>%
@@ -1257,7 +1264,7 @@ kable( caption = "Binary Y, continuous X: Power", row.names = FALSE,
 ### Subsetted simulation results (draws without non-complete separation)
 ```{r batch-2-subset-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2sub_coverage %>%
-kable( caption = "Binary Y, continuous X: Coverage probability", row.names = FALSE, 
+kable( caption = .batch.labels[ 4 ], row.names = FALSE, 
        col.names = .col.names.b2, align = .align.b2, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b2 ) %>%
@@ -1267,7 +1274,7 @@ kable( caption = "Binary Y, continuous X: Coverage probability", row.names = FAL
 \newpage
 ```{r batch-2-subset-bias-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2sub_bias %>%
-kable( caption = "Binary Y, continuous X: Bias", row.names = FALSE, 
+kable( caption = .batch.labels[ 5 ], row.names = FALSE, 
        col.names = .col.names.b2, align = .align.b2, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b2 ) %>%
@@ -1277,7 +1284,7 @@ kable( caption = "Binary Y, continuous X: Bias", row.names = FALSE,
 \newpage
 ```{r batch-2-subset-power-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2sub_power %>%
-kable( caption = "Binary Y, continuous X: Power", row.names = FALSE, 
+kable( caption = .batch.labels[ 6 ], row.names = FALSE, 
        col.names = .col.names.b2, align = .align.b2, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b2 ) %>%
@@ -1292,11 +1299,15 @@ kable( caption = "Binary Y, continuous X: Power", row.names = FALSE,
 .latex_options.b3 = c("striped", "bordered", "hold_position")
 .header.randomization.method.b3 = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method.b3 = c(" " = 4, "Model-based" = 6, "Rerandomization" = 2);
+
+.batch.labels <- paste0("Table ", 3, c("a", "b", "c", "d", "e", "f"), 
+                        ": (Continuous Y, binary X) ",
+                        c("Coverage probability", "Bias", "Power"))
 ```
 
 ```{r batch-3-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl3_coverage %>%
-kable( caption = "Continuous Y, binary X: Coverage probability", row.names = FALSE, 
+kable( caption = .batch.labels[ 1 ], row.names = FALSE, 
        col.names = .col.names.b3, align = .align.b3, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b3, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b3 ) %>%
@@ -1306,7 +1317,7 @@ kable( caption = "Continuous Y, binary X: Coverage probability", row.names = FAL
 \newpage
 ```{r batch-3-bias-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl3_bias %>%
-kable( caption = "Continuous Y, binary X: Bias", row.names = FALSE, 
+kable( caption = .batch.labels[ 2 ], row.names = FALSE, 
        col.names = .col.names.b3, align = .align.b3, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b3, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b3 ) %>%
@@ -1316,7 +1327,7 @@ kable( caption = "Continuous Y, binary X: Bias", row.names = FALSE,
 \newpage
 ```{r batch-3-power-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl3_power %>%
-kable( caption = "Continuous Y, binary X: Power", row.names = FALSE, 
+kable( caption = .batch.labels[ 3 ], row.names = FALSE, 
        col.names = .col.names.b3, align = .align.b3, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b3, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b3 ) %>%
@@ -1331,11 +1342,15 @@ kable( caption = "Continuous Y, binary X: Power", row.names = FALSE,
 .latex_options.b4 = c("striped", "bordered", "hold_position");
 .header.randomization.method.b4 = c(" " = 3, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 2);
 .header.analysis.method.b4 = c(" " = 3, "Model-based" = 6, "Rerandomization" = 2);
+
+.batch.labels <- paste0("Table ", 4, c("a", "b", "c", "d", "e", "f"), 
+                        ": (Continuous Y, continuous X) ",
+                        c("Coverage probability", "Bias", "Power"))
 ```
 
 ```{r batch-4-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl4_coverage %>%
-kable( caption = "Continuous Y, continuous X: Coverage probability", row.names = FALSE, 
+kable( caption = .batch.labels[ 1 ], row.names = FALSE, 
        col.names = .col.names.b4, align = .align.b4, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b4, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b4 ) %>%
@@ -1345,7 +1360,7 @@ kable( caption = "Continuous Y, continuous X: Coverage probability", row.names =
 \newpage
 ```{r batch-4-bias-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl4_bias %>%
-kable( caption = "Continuous Y, continuous X: Bias", row.names = FALSE, 
+kable( caption = .batch.labels[ 2 ], row.names = FALSE, 
        col.names = .col.names.b4, align = .align.b4, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b4, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b4 ) %>%
@@ -1355,7 +1370,7 @@ kable( caption = "Continuous Y, continuous X: Bias", row.names = FALSE,
 \newpage
 ```{r batch-4-power-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl4_power %>%
-kable( caption = "Continuous Y, continuous X: Power", row.names = FALSE, 
+kable( caption = .batch.labels[ 3 ], row.names = FALSE, 
        col.names = .col.names.b4, align = .align.b4, booktabs = TRUE) %>%
   kable_styling( latex_options = .latex_options.b4, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b4 ) %>%
