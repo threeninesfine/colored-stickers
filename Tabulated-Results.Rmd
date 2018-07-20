@@ -48,6 +48,17 @@ options( scipen = 999 )
 #         scipen = 10)  # replaces NA entries with ' - ' in kable output
 #         scipen = 999 )  # effectively disables scientific notation
 setwd(getwd())  # set working directory to current file path.
+
+# function kable_booktabs_linesep()
+kable_booktabs_linesep <- function( nlines = 6 ){
+  #' input: 
+  #'   nlines := number of lines per block of table rows
+  #' output:
+  #'   [character] linespace string to pass to kable()
+  #' example:
+  #'   kable( foo_table, booktabs = TRUE, linesep = kable_booktabs_linesep( nlines = 6) )
+  return(c(rep( '', nlines - 1 ), "\\addlinespace"))
+}
 ```
 
 ```{r load_datasets, cache = TRUE, echo = FALSE}
@@ -144,6 +155,19 @@ linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline'
 # Example:
 
 kable(cars, format = "latex", booktabs = TRUE, linesep = "")
+```
+Made a function that outputs a formatted string for 'linesep' argument, with the given number of lines per separation:
+```{r}
+# function kable_booktabs_linesep()
+kable_booktabs_linesep <- function( nlines = 6 ){
+  #' input: 
+  #'   nlines := number of lines per block of table rows
+  #' output:
+  #'   [character] linespace string to pass to kable()
+  #' example:
+  #'   kable( foo_table, booktabs = TRUE, linesep = kable_booktabs_linesep( nlines = 6) )
+  return(c(rep( '', nlines - 1 ), "\\addlinespace"))
+}
 ```
 
 5. Sometimes the columns at the right have NA and sometimes just 0 or 1.  I’m assuming when it’s just 0 or 1 that those have not finished running yet, right?
@@ -1153,12 +1177,13 @@ tbl4_power <- cbind( tbl4_power_adj_sort[,c(5:7)],
 .batch.labels <- paste0("Table ", 1, c("a", "b", "c", "d", "e", "f"), 
                         ": (Binary Y, binary X) ",
                         c("Coverage probability", "Bias", "Power"))
+.linesep = kable_booktabs_linesep( nlines = 6 )
 ```
 
 ```{r batch-1-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl1_coverage %>%
 kable( caption = .batch.labels[ 1 ], row.names = FALSE, 
-       col.names = .col.names.b1, align = .align.b1, booktabs = TRUE) %>%
+       col.names = .col.names.b1, align = .align.b1, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b1 ) %>%
   add_header_above( .header.analysis.method.b1 )
@@ -1168,7 +1193,7 @@ kable( caption = .batch.labels[ 1 ], row.names = FALSE,
 ```{r batch-1-bias-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl1_bias %>%
 kable( caption = .batch.labels[ 2 ], row.names = FALSE, 
-       col.names = .col.names.b1, align = .align.b1, booktabs = TRUE) %>%
+       col.names = .col.names.b1, align = .align.b1, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b1 ) %>%
   add_header_above( .header.analysis.method.b1 )
@@ -1178,7 +1203,7 @@ kable( caption = .batch.labels[ 2 ], row.names = FALSE,
 ```{r batch-1-power-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl1_power %>%
 kable( caption = .batch.labels[ 3 ], row.names = FALSE, 
-       col.names = .col.names.b1, align = .align.b1, booktabs = TRUE) %>%
+       col.names = .col.names.b1, align = .align.b1, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b1 ) %>%
   add_header_above( .header.analysis.method.b1 )
@@ -1189,7 +1214,7 @@ kable( caption = .batch.labels[ 3 ], row.names = FALSE,
 ```{r batch-1-subset-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl1sub_coverage %>%
 kable( caption = .batch.labels[ 4 ], row.names = FALSE, 
-       col.names = .col.names.b1, align = .align.b1, booktabs = TRUE) %>%
+       col.names = .col.names.b1, align = .align.b1, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b1 ) %>%
   add_header_above( .header.analysis.method.b1 )
@@ -1199,7 +1224,7 @@ kable( caption = .batch.labels[ 4 ], row.names = FALSE,
 ```{r batch-1-subset-bias-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl1sub_bias %>%
 kable( caption = .batch.labels[ 5 ], row.names = FALSE, 
-       col.names = .col.names.b1, align = .align.b1, booktabs = TRUE) %>%
+       col.names = .col.names.b1, align = .align.b1, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b1 ) %>%
   add_header_above( .header.analysis.method.b1 )
@@ -1209,7 +1234,7 @@ kable( caption = .batch.labels[ 5 ], row.names = FALSE,
 ```{r batch-1-subset-power-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl1sub_power %>%
 kable( caption = .batch.labels[ 6 ], row.names = FALSE, 
-       col.names = .col.names.b1, align = .align.b1, booktabs = TRUE) %>%
+       col.names = .col.names.b1, align = .align.b1, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b1, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b1 ) %>%
   add_header_above( .header.analysis.method.b1 )
@@ -1228,13 +1253,15 @@ kable( caption = .batch.labels[ 6 ], row.names = FALSE,
 .batch.labels <- paste0("Table ", 2, c("a", "b", "c", "d", "e", "f"), 
                         ": (Binary Y, continuous X) ",
                         c("Coverage probability", "Bias", "Power"))
+
+.linesep = kable_booktabs_linesep( nlines = 6 )
 ```
 
 ### Complete simulation results (5010 simulation draws)
 ```{r batch-2-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2_coverage %>%
 kable( caption = .batch.labels[ 1 ], row.names = FALSE, 
-       col.names = .col.names.b2, align = .align.b2, booktabs = TRUE) %>%
+       col.names = .col.names.b2, align = .align.b2, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b2 ) %>%
   add_header_above( .header.analysis.method.b2 )
@@ -1244,7 +1271,7 @@ kable( caption = .batch.labels[ 1 ], row.names = FALSE,
 ```{r batch-2-bias-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2_bias %>%
 kable( caption = .batch.labels[ 2 ], row.names = FALSE, 
-       col.names = .col.names.b2, align = .align.b2, booktabs = TRUE) %>%
+       col.names = .col.names.b2, align = .align.b2, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b2 ) %>%
   add_header_above( .header.analysis.method.b2 )
@@ -1254,7 +1281,7 @@ kable( caption = .batch.labels[ 2 ], row.names = FALSE,
 ```{r batch-2-power-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2_power %>%
 kable( caption = .batch.labels[ 3 ], row.names = FALSE, 
-       col.names = .col.names.b2, align = .align.b2, booktabs = TRUE) %>%
+       col.names = .col.names.b2, align = .align.b2, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b2 ) %>%
   add_header_above( .header.analysis.method.b2 )
@@ -1265,7 +1292,7 @@ kable( caption = .batch.labels[ 3 ], row.names = FALSE,
 ```{r batch-2-subset-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2sub_coverage %>%
 kable( caption = .batch.labels[ 4 ], row.names = FALSE, 
-       col.names = .col.names.b2, align = .align.b2, booktabs = TRUE) %>%
+       col.names = .col.names.b2, align = .align.b2, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b2 ) %>%
   add_header_above( .header.analysis.method.b2 )
@@ -1275,7 +1302,7 @@ kable( caption = .batch.labels[ 4 ], row.names = FALSE,
 ```{r batch-2-subset-bias-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2sub_bias %>%
 kable( caption = .batch.labels[ 5 ], row.names = FALSE, 
-       col.names = .col.names.b2, align = .align.b2, booktabs = TRUE) %>%
+       col.names = .col.names.b2, align = .align.b2, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b2 ) %>%
   add_header_above( .header.analysis.method.b2 )
@@ -1285,7 +1312,7 @@ kable( caption = .batch.labels[ 5 ], row.names = FALSE,
 ```{r batch-2-subset-power-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2sub_power %>%
 kable( caption = .batch.labels[ 6 ], row.names = FALSE, 
-       col.names = .col.names.b2, align = .align.b2, booktabs = TRUE) %>%
+       col.names = .col.names.b2, align = .align.b2, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b2, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b2 ) %>%
   add_header_above( .header.analysis.method.b2 )
@@ -1303,12 +1330,13 @@ kable( caption = .batch.labels[ 6 ], row.names = FALSE,
 .batch.labels <- paste0("Table ", 3, c("a", "b", "c", "d", "e", "f"), 
                         ": (Continuous Y, binary X) ",
                         c("Coverage probability", "Bias", "Power"))
+.linesep = kable_booktabs_linesep( nlines = 6 )
 ```
 
 ```{r batch-3-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl3_coverage %>%
 kable( caption = .batch.labels[ 1 ], row.names = FALSE, 
-       col.names = .col.names.b3, align = .align.b3, booktabs = TRUE) %>%
+       col.names = .col.names.b3, align = .align.b3, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b3, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b3 ) %>%
   add_header_above( .header.analysis.method.b3 )
@@ -1318,7 +1346,7 @@ kable( caption = .batch.labels[ 1 ], row.names = FALSE,
 ```{r batch-3-bias-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl3_bias %>%
 kable( caption = .batch.labels[ 2 ], row.names = FALSE, 
-       col.names = .col.names.b3, align = .align.b3, booktabs = TRUE) %>%
+       col.names = .col.names.b3, align = .align.b3, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b3, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b3 ) %>%
   add_header_above( .header.analysis.method.b3 )
@@ -1328,7 +1356,7 @@ kable( caption = .batch.labels[ 2 ], row.names = FALSE,
 ```{r batch-3-power-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl3_power %>%
 kable( caption = .batch.labels[ 3 ], row.names = FALSE, 
-       col.names = .col.names.b3, align = .align.b3, booktabs = TRUE) %>%
+       col.names = .col.names.b3, align = .align.b3, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b3, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b3 ) %>%
   add_header_above( .header.analysis.method.b3 )
@@ -1346,12 +1374,13 @@ kable( caption = .batch.labels[ 3 ], row.names = FALSE,
 .batch.labels <- paste0("Table ", 4, c("a", "b", "c", "d", "e", "f"), 
                         ": (Continuous Y, continuous X) ",
                         c("Coverage probability", "Bias", "Power"))
+.linesep = kable_booktabs_linesep( nlines = 6 )
 ```
 
 ```{r batch-4-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl4_coverage %>%
 kable( caption = .batch.labels[ 1 ], row.names = FALSE, 
-       col.names = .col.names.b4, align = .align.b4, booktabs = TRUE) %>%
+       col.names = .col.names.b4, align = .align.b4, booktabs = TRUE, linesep = .linesep ) %>%
   kable_styling( latex_options = .latex_options.b4, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b4 ) %>%
   add_header_above( .header.analysis.method.b4 )
@@ -1361,7 +1390,7 @@ kable( caption = .batch.labels[ 1 ], row.names = FALSE,
 ```{r batch-4-bias-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl4_bias %>%
 kable( caption = .batch.labels[ 2 ], row.names = FALSE, 
-       col.names = .col.names.b4, align = .align.b4, booktabs = TRUE) %>%
+       col.names = .col.names.b4, align = .align.b4, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b4, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b4 ) %>%
   add_header_above( .header.analysis.method.b4 )
@@ -1371,7 +1400,7 @@ kable( caption = .batch.labels[ 2 ], row.names = FALSE,
 ```{r batch-4-power-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl4_power %>%
 kable( caption = .batch.labels[ 3 ], row.names = FALSE, 
-       col.names = .col.names.b4, align = .align.b4, booktabs = TRUE) %>%
+       col.names = .col.names.b4, align = .align.b4, booktabs = TRUE, linesep = .linesep) %>%
   kable_styling( latex_options = .latex_options.b4, full_width = FALSE ) %>%
   add_header_above( .header.randomization.method.b4 ) %>%
   add_header_above( .header.analysis.method.b4 )
