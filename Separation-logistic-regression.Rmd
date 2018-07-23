@@ -1,0 +1,279 @@
+---
+title: "Completely Separated? Evaluating Simulations for Logistic Regression Models"
+author: "Michael Flanagin  \\ flanna@uw.edu"
+date: "7/23/2018"
+classoption: portrait
+header-includes:
+  - \usepackage[table]{xcolor}
+  - \usepackage{booktabs}
+  - \usepackage{caption}
+output:
+  pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    number_sections: yes
+  html_document:
+    fig_caption: yes
+    force_captions: yes
+    highlight: pygments
+    number_sections: yes
+    theme: cerulean
+csl: mee.csl
+bibliography: references.bib
+---
+\captionsetup[table]{ labelformat = empty } <!-- disable auto table numbering with kable -->
+
+```{r setup, eval = FALSE, echo=FALSE}
+  devtools::install_github("cboettig/knitcitations@v1")
+  library(knitcitations); cleanbib()
+  cite_options(citation_format = "pandoc", check.entries=FALSE)
+  library(bibtex)
+```
+
+```{r globalopts, cache = TRUE, warning = FALSE, echo = FALSE}
+# Load libraries necessary for functions used in this document
+library('knitr')
+library('xtable')
+library('kableExtra')  # for additional table formatting
+# library('dplyr')  # for table coloring
+# Set global chunk options
+opts_chunk$set(echo = FALSE,     # do NOT repeat code in final document
+               message = FALSE,  # do NOT print R messages in document
+               warning = FALSE,  # do NOT print warnings
+               self.contained = TRUE ) # do NOT call other .Rnw docs! 
+round_digits <- 3  # digits to round to when presenting results
+options( knitr.table.format = "latex")  # guarantees 'kableExtra' formatting handled properly
+options( scipen = 999 )
+#         knitr.kable.na = " - ", 
+#         scipen = 10)  # replaces NA entries with ' - ' in kable output
+#         scipen = 999 )  # effectively disables scientific notation
+setwd(getwd())  # set working directory to current file path.
+
+# function kable_booktabs_linesep()
+kable_booktabs_linesep <- function( nlines = 6 ){
+  #' input: 
+  #'   nlines := number of lines per block of table rows
+  #' output:
+  #'   [character] linespace string to pass to kable()
+  #' example:
+  #'   kable( foo_table, booktabs = TRUE, linesep = kable_booktabs_linesep( nlines = 6) )
+  return(c(rep( '', nlines - 1 ), "\\addlinespace"))
+}
+```
+
+# The Issue
+Four simulation settings are considered on the basis of variable type (binary or continuous) for outcomes and prognostic factors.
+They are referred to as:
+
+* Batch 1: binary outcome (Y), binary prognostic factors (X)
+* Batch 2: binary outcome (Y), continuous prognostic factors (X)
+* Batch 3: continuous outcome (Y), binary prognostic factors (X)
+* Batch 4: continuous outcome (Y), continuous prognostic factors (X)
+
+For binary outcomes (Batches 1 and 2) under low outcome prevalence settings, one treatment group may end up having all observed events (thus the prognostic factor perfectly predicts the outcomes).
+In this case (dubbed \textit{complete separation}), the logistic regression optimization fails to converge.
+In \textbf{R} the glm() function returns inflated estimates and standard errors.
+
+We first chose to identify these cases using a threshold standard error of 1000, but the resulting bias tables (see "Tabulating Results" report as of 18 July 2018) indicate we need to do more to characterize simulations exhibiting complete (or partial) separation that result in inflated estimates and standard errors.
+
+# The Data
+We load in the simulation results from both Batch 1 and 2. 
+Note: these files are large (greater than 1gb in some cases)
+
+```{r load_datasets, cache = TRUE, echo = TRUE}
+library("simulator")
+
+#' [ 'results_directory' contains folder 'files' with .Rdata model, draw, output, evals ] 
+results_directory <- "/Users/Moschops/Documents/MSThesis/datasets/results"
+
+#' [ Batch 1 of 4: binary Y, binary X ] 
+batch1 <- load_simulation( name = "alloc-simulation-batch-1-of-4", dir = results_directory )
+#' [ Batch 2 of 4: binary Y, continuous X ] 
+batch2 <- load_simulation( name = "alloc-simulation-batch-2-of-4", dir = results_directory )
+
+```
+
+Output is classified by:
+
+* allocation method
+  + Complete randomization ("CR"),
+  + Stratified block randomization("SBR"),
+  + Covariate adaptive allocation, probability of biased allocation of 0.70 ("CAA-MI-2-PBA-0.70")
+  + Covariate adaptive allocation, probability of biased allocation of 1.00 ("CAA-MI-2-PBA-1.00")
+
+```{r output-method-names, cache = TRUE, echo = TRUE}
+#' List of valid output method names
+alloc_method <- c("CR", "SBR", "CAA-MI-2-PBA-0.70", "CAA-MI-2-PBA-1.00");
+analysis_method <- c("REG", "RERAND");
+adjustment <- c("ADJ", "UN")
+
+pastey <- function( ... ){ paste( ..., sep = "_")}
+print(method_names_short <- do.call(pastey, expand.grid( alloc_method[1:3], analysis_method[1], adjustment )))
+print(method_names_rerand <- do.call(pastey, expand.grid( alloc_method[3], analysis_method[2], adjustment )))
+print(method_names_determ <- do.call(pastey, expand.grid( alloc_method[4], analysis_method, adjustment )))
+###############################################################################
+methods_to_use <- c( method_names_short, method_names_rerand, method_names_determ)
+
+```
+
+# Processing Results: One Example
+
+We loop through each model in the simulation, processing the results.
+Below is an example where we consider the first model (and loop through the remainder of the models after). 
+Note: each output() call takes at least 120 seconds.
+```{r process-results, eval = FALSE, cache = TRUE, echo = TRUE}
+verbose <- FALSE  # display simulation information as well as runtimes?
+sim_j <- 1;  # only do the first iteration of the loop
+if( verbose ){
+  cat(paste0("[ Model ", sim_j, " ][-|       ] Loading output from simulation [ ", batch1@name, " ]...\n")); ptm.all <- proc.time()
+}
+tryCatch({
+  output_j <- output( batch1, methods = methods_to_use )[[ sim_j ]] #' Model sim_j, 
+  }, error=function(e){cat("ERROR :",conditionMessage(e), "\n"); next})
+method_names_output <- sapply( output_j, function( .object ){ .object@method_name }) 
+#' simulation model has these outputs:
+cbind( 1:length( method_names_output ), method_names_output )
+```
+Converting output objects to data frames (example 1, consider the runtimes!)
+```{r process-results, eval = FALSE, cache = TRUE, echo = TRUE}
+  dfs <- list();
+  for( i in 1:length( index_output_methods_to_include )){
+    out.index <- index_output_methods_to_include[ i ]
+    dfs[[ i ]]  <- data.frame(t(vapply( output_j[[ out.index ]]@out, function( .list ){ unlist( .list[1:9] )}, numeric(9))))
+    dimnames(dfs[[i]])[[2]] <- c("est", "se", "t", "p", "adjusted", "rerandomized", "cilower", "ciupper", "num_rerandomizations")
+  }
+  cat(paste0("Success! \nElapsed time: \n")); print( proc.time() - ptm );
+```
+
+```{r process-results-looped, eval = FALSE, cache = TRUE, echo = TRUE}
+verbose <- FALSE  # display simulation information as well as runtimes?
+#' [2] Process results
+for( sim_j in 1:length(model( batch1 )) ){
+  if( verbose ){
+      cat(paste0("[ Model ", sim_j, " ][-|       ] Loading output from simulation [ ", batch1@name, " ]...\n")); ptm.all <- proc.time();
+  }
+  tryCatch({
+    output_j <- output( batch1, methods = methods_to_use )[[ sim_j ]] #' Model sim_j, 
+  }, error=function(e){cat("ERROR :",conditionMessage(e), "\n"); next})
+  method_names_output <- sapply( output_j, function( .object ){ .object@method_name }) #' get method names (compare to 'methods_to_use')
+  methods_to_exclude <- c("CR", "SBR", "CAA", "CAA-MI-2-PBA-0.70", "CAA-MI-2-PBA-1.00");  #' exclude output from list that only contains allocation methods
+  index_output_methods_to_include <- which(!( method_names_output %in% methods_to_exclude ))
+}
+```
+
+
+# Introduction
+Simulation results are presented by outcome and predictor variable type pairs (binary, continuous).
+
+Each outcome/predictor pair, we present tables on: 
+
+* coverage probability, 
+* bias, and 
+* power.
+
+Simulation conditions are ordered by:
+
+* sample size (n), 
+* marginal outcome prevalence Pr( Y ),
+* prognostic factor prevalence Pr( X ),
+* treatment effect size (bZ), and
+* prognostic factor effect size (bX).
+
+Binary outcomes are fit with a Binomial generalized linear model, continuous outomes with an ordinary linear model.
+
+Resulting estimates of treatment effect are adjusted ('adj') or unadjusted ('unadj') for prognostic factors used in the allocation method.
+
+Three allocation methods are compared to each other:
+
+* Complete randomization (CR),
+* Stratified block randomization (SBR), with a block size of 4,
+* Covariate adaptive allocation (CAA), with a maximum imbalance of 2 and an allocation biasing probability of 0.70.
+
+The analysis method for uncertainty estimates is either:
+
+* Model-based (using p-values from relevant t-statistics), or
+* Rerandomization-based, with 500 rerandomized treatment allocations performed per simulation draw.
+
+# Comments
+Suggested modifications:
+
+* Order simulation conditions in sort order, i.e. columns from left to right should go: n, Pr(Y), Pr(X), ...
+* Investigate issue with large positive biases
+* Correct issue with scientific notation (suspect it may have to do with high bias (see previous)
+* For batches 1 and 2, present complete and subsetted metric table side by side / sequentially (rather than currently: complete results, then subsetted results)
+\newpage
+
+# Comments from Amalia (NEW: 18 July 2018)
+
+OK, fantastic, here are some thoughts on this version.  Try to refer to this email as a checklist and go through each one.
+
+For formatting,
+
+1. Number the tables based on batch number (1a 1b, etc) so can tell where you are in the types of outcomes.
+
+ref1: https://stackoverflow.com/questions/31182147/suppress-automatic-table-name-and-number-in-an-rmd-file-using-xtable-or-knitr
+ref2: https://stackoverflow.com/questions/30679537/get-rid-of-captions-when-using-texreg-in-rmarkdown
+```
+In the YAML section where LaTeX packages can be included, 
+add the caption package:
+
+header-includes:
+    - \usepackage{caption}
+Then at the beginning of the RMarkdown document body add:
+
+\captionsetup[table]{labelformat=empty}
+This removes the caption labels for all tables.
+```
+
+2. Include the proportion of runs included in each row of the tables where you include only draws without non-complete separation
+
+3. Some tables still need scientific notation taken out of the extra large or small numbers.  If #s too big, perhaps can use >999 or something
+
+4. I like the row spacing used to split up the vertical space, you have used every 5 rows, but perhaps split where something changes to make more coherent groups, perhaps every 6 rows where the value of P(X) or P(Y) changes.  Even batch 4 could put a vertical space every 6 rows since sample size changes.
+
+```
+You can add the argument linesep = "" to kable. 
+This will be passed on to kable_latex where it overwrites the default
+
+linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline'
+# Example:
+
+kable(cars, format = "latex", booktabs = TRUE, linesep = "")
+```
+Made a function that outputs a formatted string for 'linesep' argument, with the given number of lines per separation:
+```{r}
+# function kable_booktabs_linesep()
+kable_booktabs_linesep <- function( nlines = 6 ){
+  #' input: 
+  #'   nlines := number of lines per block of table rows
+  #' output:
+  #'   [character] linespace string to pass to kable()
+  #' example:
+  #'   kable( foo_table, booktabs = TRUE, linesep = kable_booktabs_linesep( nlines = 6) )
+  return(c(rep( '', nlines - 1 ), "\\addlinespace"))
+}
+```
+
+5. Sometimes the columns at the right have NA and sometimes just 0 or 1.  I’m assuming when it’s just 0 or 1 that those have not finished running yet, right?
+
+6. Remove far right column for rerandomized and unadjusted.  Do not run these, not part of our aims.
+
+7. Something seems amiss with table 11, some of the columns match exactly.
+
+8. Tables 11 and 12 both say ‘bias’ in heading, but I think second one should be power?
+
+
+For inference,
+
+9. We need to be able to interpret the bias.  So each table should include the true value that was compared to the estimates to compute bias.  I think when we sat down this was log(bZ), not bZ, right? 
+
+10. Here is what I’m seeing in terms of patterns:  Coverage and bias seem potentially reasonable, waiting for some precision, hard to see. 
+
+11. So focusing on power, which is our main objective.  Seems to me that there is actually a benefit in terms of power for re-randomization even in the absence of drift for binary Y; this is seen when comparing CAA rerand adj vs CAA model-based adj. 
+
+12. Secondly with regard to power, when comparing the model based adjusted methods only and ignoring rerandomization, there seems to be no power advantage to using covariate adjusted randomization versus either block or simple randomization.  Do you agree?  Fascinating.
+
+13. How it is going with the other simulations not shown here, batches 1 and 2 with n=96?  Are they running?
+
+
+
