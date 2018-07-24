@@ -71,10 +71,12 @@ They are referred to as:
 * Batch 4: continuous outcome (Y), continuous prognostic factors (X)
 
 For binary outcomes (Batches 1 and 2) under low outcome prevalence settings, one treatment group may end up having all observed events (thus the prognostic factor perfectly predicts the outcomes).
-In this case (dubbed \textit{complete separation}), the logistic regression optimization fails to converge.
-In \textbf{R} the glm() function returns inflated estimates and standard errors.
+In this case (dubbed _complete separation_), the logistic regression optimization fails to converge.
+In __R__ the glm() function returns inflated estimates and standard errors.
 
 We first chose to identify these cases using a threshold standard error of 1000, but the resulting bias tables (see "Tabulating Results" report as of 18 July 2018) indicate we need to do more to characterize simulations exhibiting complete (or partial) separation that result in inflated estimates and standard errors.
+
+*******************************************************************************
 
 # The Data
 We load in the simulation results from both Batch 1 and 2. 
@@ -116,14 +118,16 @@ methods_to_use <- c( method_names_short, method_names_rerand, method_names_deter
 
 ```
 
+*******************************************************************************
+
 # Processing Results: One Example
 
 We loop through each model in the simulation, processing the results.
 Below is an example where we consider the first model (and loop through the remainder of the models after). 
 Note: each output() call takes at least 120 seconds.
-```{r process-results, eval = FALSE, cache = TRUE, echo = TRUE}
-verbose <- FALSE  # display simulation information as well as runtimes?
+```{r process-results, eval = TRUE, cache = TRUE, echo = TRUE}
 sim_j <- 1;  # only do the first iteration of the loop
+verbose <- FALSE  # display simulation information as well as runtimes?
 if( verbose ){
   cat(paste0("[ Model ", sim_j, " ][-|       ] Loading output from simulation [ ", batch1@name, " ]...\n")); ptm.all <- proc.time()
 }
@@ -135,31 +139,101 @@ method_names_output <- sapply( output_j, function( .object ){ .object@method_nam
 cbind( 1:length( method_names_output ), method_names_output )
 ```
 Converting output objects to data frames (example 1, consider the runtimes!)
-```{r process-results, eval = FALSE, cache = TRUE, echo = TRUE}
-  dfs <- list();
-  for( i in 1:length( index_output_methods_to_include )){
-    out.index <- index_output_methods_to_include[ i ]
-    dfs[[ i ]]  <- data.frame(t(vapply( output_j[[ out.index ]]@out, function( .list ){ unlist( .list[1:9] )}, numeric(9))))
-    dimnames(dfs[[i]])[[2]] <- c("est", "se", "t", "p", "adjusted", "rerandomized", "cilower", "ciupper", "num_rerandomizations")
-  }
-  cat(paste0("Success! \nElapsed time: \n")); print( proc.time() - ptm );
+```{r approach-1-output-to-df, eval = FALSE, cache = TRUE, echo = FALSE}
+cat(paste0("Approach 1: Loading output into data frames:\n")); ptm <- proc.time();
+dfs <- list();
+for( out.index in 1:length( output_j )){
+  dfs[[ out.index ]]  <- data.frame(t(vapply( output_j[[ out.index ]]@out, function( .list ){ unlist( .list[1:9] )}, numeric(9))))
+  dimnames(dfs[[ out.index ]])[[2]] <- c("est", "se", "t", "p", "adjusted", "rerandomized", 
+                                         "cilower", "ciupper", "num_rerandomizations")
+}
+cat(paste0("Success! \nElapsed time: \n")); print( proc.time() - ptm );
 ```
 
-```{r process-results-looped, eval = FALSE, cache = TRUE, echo = TRUE}
-verbose <- FALSE  # display simulation information as well as runtimes?
-#' [2] Process results
-for( sim_j in 1:length(model( batch1 )) ){
-  if( verbose ){
-      cat(paste0("[ Model ", sim_j, " ][-|       ] Loading output from simulation [ ", batch1@name, " ]...\n")); ptm.all <- proc.time();
-  }
-  tryCatch({
-    output_j <- output( batch1, methods = methods_to_use )[[ sim_j ]] #' Model sim_j, 
-  }, error=function(e){cat("ERROR :",conditionMessage(e), "\n"); next})
-  method_names_output <- sapply( output_j, function( .object ){ .object@method_name }) #' get method names (compare to 'methods_to_use')
-  methods_to_exclude <- c("CR", "SBR", "CAA", "CAA-MI-2-PBA-0.70", "CAA-MI-2-PBA-1.00");  #' exclude output from list that only contains allocation methods
-  index_output_methods_to_include <- which(!( method_names_output %in% methods_to_exclude ))
+Converting output objects to data frames (approach 2, using matrices)
+```{r approach-2-output-to-df, eval = TRUE, cache = TRUE, echo = TRUE}
+cat(paste0("Approach 2: Loading output into matrices:\n")); ptm <- proc.time();
+var_labels <- c("est", "se", "t", "p", "adjusted", "rerandomized", "cilower", "ciupper", "num_rerandomizations")
+nsim <- 5010;
+# Given the above dimensions, initialize 'outmat' matrix beforehand.
+outmats <- lapply( 1:length( output_j ), function( .dummy.null = NULL ){ 
+  matrix(nrow = nsim, ncol = length( var_labels ), dimnames = list(NULL, var_labels)) })
+for( out.index in 1:length( output_j )){
+  outmats[[ out.index ]][,]  <- t(vapply( output_j[[ out.index ]]@out, function( .list ){ unlist( .list[1:9] )}, numeric(9)))
 }
+cat(paste0("Success! \nElapsed time: \n")); print( proc.time() - ptm );
 ```
+
+*******************************************************************************
+
+# Processing Results: Model 1, Output 1
+```{r evaluate-output-mod-1-out-1, eval = TRUE, cache = TRUE, echo = TRUE}
+out.index = 1; # considering output 1 
+# Here are the simulation conditions (settings) for model 1, output 1:
+unlist(model( batch1 )[[1]]@params)
+# Here is the method name for model 1, output 1:
+method_names_output[ out.index ]
+# Note that outcome_marginal_prevalence = 0.10 & trial_size = 32
+outmatrix <- outmats[[ out.index ]]
+# Here are first several rows
+head( outmatrix )
+```
+For instance, rows 3 and 6 have large estimates and standard errors.
+We plot estimates vs. SEs to identify any trends.
+```{r fig-est-vs-se, eval = TRUE, cache = TRUE, echo = TRUE}
+# plot ests vs. SEs without any classifiers
+plot( outmatrix[,"est"], outmatrix[,"se"], xlab = "Estimate", ylab = "Standard Error (SE)",
+                    main = paste0("Estimates vs. SEs, logistic regression \nModel 1, Output: ", 
+                                  method_names_output[ out.index ]))
+```
+
+Using the previous method of excluding simulation conditions where the standard errors were greater than 1000, 
+this classifier fails to identify simulations with estimates greater than 40 in both directions, but with small SEs.
+What are these points, and what simulated outcomes (and predictors) do they correspond to?
+```{r fig-est-vs-se-colored-scatter, eval = TRUE, cache = TRUE, echo = TRUE}
+# TODO( michael ): plot estimates vs. SEs using 'SE greater than 1k' classifier
+plot( outmatrix[, "est"], outmatrix[, "se"], xlab = "Estimate", ylab = "Standard Error (SE)",
+      col = ifelse( outmatrix[, "se"] > 1000, "red", "black"),
+      main = paste0("Estimates vs. SEs, logistic regression \nModel 1, Output: ", method_names_output[ out.index ]))
+
+classifier_1 <- outmatrix[, "se"] > 1000;
+mean( classifier_1 )
+classifier_2 <- outmatrix[, "se"] > 1000 | abs( outmatrix[, "est"] ) > 40;
+mean( classifier_2 )
+class2_newpoints <- which( classifier_2 & ! classifier_1 ) 
+cols.classifier <- ifelse( outmatrix[, "se"] > 1000, "red",
+                            ifelse(abs( outmatrix[, "est"] ) > 40, "blue", "black" ))
+
+# Compare to new classifier
+plot( outmatrix[, "est"], outmatrix[, "se"], xlab = "Estimate", ylab = "Standard Error (SE)",
+      col = cols.classifier,
+      main = paste0("Estimates vs. SEs, logistic regression \nModel 1, Output: ", method_names_output[ out.index ]))
+legend("topright", legend = c("SE less than 1000, abs(est) greater than 40",
+                              "SE greater than 1000",
+                              "Valid estimates"),
+       col = c("red", "blue", "black"), pch = 16)
+```
+
+      
+```{r fig-est-vs-se-colored-hist, eval = TRUE, cache = TRUE, echo = TRUE}
+
+
+h1 <- hist( outmatrix[ classifier_1 , "est"], plot=FALSE )
+h2 <- hist( outmatrix[ !classifier_1 , "est"], plot=FALSE )
+h2$counts = - h2$counts
+hmax = max( h1$counts )
+hmin = min( h2$counts )
+X = c( h1$breaks, h2$breaks )
+xmax = max( X )
+xmin = min( X )
+plot(h1, ylim=c(hmin, hmax), col="green", xlim=c(xmin, xmax),
+     main = "Estimates classified by SE greater than 1000 (green)")
+lines(h2, col="blue")
+```
+
+
+
+*******************************************************************************
 
 
 # Introduction
