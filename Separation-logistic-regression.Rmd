@@ -218,7 +218,7 @@ plot( outmatrix[, "est"], outmatrix[, "se"], xlab = "Estimate", ylab = "Standard
 legend("topright", legend = c("SE less than 1000, abs(est) greater than 40",
                               "SE greater than 1000",
                               "Valid estimates"),
-       col = c("red", "blue", "black"), pch = 16)
+       col = c("blue", "red", "black"), pch = 16)
 ```
 
 What do these simulations correspond to?

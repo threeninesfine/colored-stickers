@@ -72,9 +72,9 @@ metrics_cybx <- read.csv(paste0( datadir_path, "metrics-alloc-simulation-batch-3
 #' [ Batch 4 of 4: continuous Y, continuous X ] 
 metrics_cycx <- read.csv(paste0( datadir_path, "metrics-alloc-simulation-batch-4-of-4.csv" ))
 
-#' [ Batch 1 of 4: binary Y, binary X -- subsetted on draws without complete/quasi separation ]
+#' [ Batch 1 of 4: binary Y, binary X -- subsetted on simulations without complete/quasi separation ]
 metrics_bybx_sub <- read.csv(paste0( datadir_path, "metrics-subset-alloc-simulation-batch-1-of-4.csv" ))
-#' [ Batch 2 of 4: binary Y, continuous X -- subsetted on draws without complete/quasi separation ]
+#' [ Batch 2 of 4: binary Y, continuous X -- subsetted on simulations without complete/quasi separation ]
 metrics_bycx_sub <- read.csv(paste0( datadir_path, "metrics-subset-alloc-simulation-batch-2-of-4.csv" ))
 ```
 
@@ -92,7 +92,7 @@ Simulation conditions are ordered by:
 * sample size (n), 
 * marginal outcome prevalence Pr( Y ),
 * prognostic factor prevalence Pr( X ),
-* treatment effect size (bZ), and
+* treatment effect size (exp( bZ )), and
 * prognostic factor effect size (bX).
 
 Binary outcomes are fit with a Binomial generalized linear model, continuous outomes with an ordinary linear model.
@@ -141,7 +141,7 @@ Then at the beginning of the RMarkdown document body add:
 This removes the caption labels for all tables.
 ```
 
-2. Include the proportion of runs included in each row of the tables where you include only draws without non-complete separation
+2. Include the proportion of runs included in each row of the tables where you include only simulations without non-complete separation
 
 3. Some tables still need scientific notation taken out of the extra large or small numbers.  If #s too big, perhaps can use >999 or something
 
@@ -360,7 +360,7 @@ tbl1_power <- cbind( tbl1_power_adj_sort[,c(5:9)],
                         CAA_rerand_un = tbl1_power_un_sort[, "CAA_rerand"])
 ```
 
-<!-- BATCH 1 of 4, SUBSETTING ON VALID DRAWS --> 
+<!-- BATCH 1 of 4, SUBSETTING ON VALID simulations --> 
 ```{r batch-1-subset-binY-binX_coverage, cache = TRUE, echo = FALSE}
 #' Adjusted analysis
 tbl1sub1_cov_adj <- subset( metrics_bybx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence, prognostic_factor_prevalence ),
@@ -382,20 +382,23 @@ tbl1sub4_cov_un <- subset( metrics_bybx_sub, select = c( nsim, coverage, trial_s
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 1 & adjusted == 0 ) )
 
 #' Table 1a: Coverage (adjusted tx effect)
+index_remove <- which( colnames(tbl1sub3_cov_adj) == "coverage" )
 tbl1sub_coverage_adj <- cbind( CR = round( tbl1sub1_cov_adj[,"coverage"], round_digits ),
                             SBR = round( tbl1sub2_cov_adj[,"coverage"], round_digits ),
                             CAA_model = round( tbl1sub3_cov_adj[,"coverage"], round_digits ),
                             CAA_rerand = round( tbl1sub4_cov_adj[,"coverage"], round_digits ),
-                            tbl1sub3_cov_adj[,-1] )
+                            tbl1sub3_cov_adj[, -index_remove] )
 dimnames( tbl1sub_coverage_adj )[[2]] <- c("CR", "SBR", "CAA_model", "CAA_rerand", "n", "bZ", "bX", "Pr( Y )", "Pr( X )")
 
 #' Table 1b: Coverage (adjusted tx effect)
+index_remove <- which( colnames(tbl1sub3_cov_un) == "coverage" )
+
 tbl1sub_coverage_un <- cbind( CR = round( tbl1sub1_cov_un[,"coverage"], round_digits ),
                             SBR = round( tbl1sub2_cov_un[,"coverage"], round_digits ),
                             CAA_model = round( tbl1sub3_cov_un[,"coverage"], round_digits ),
                            CAA_rerand = rep(NA, times = nrow( tbl1sub4_cov_adj )),  # TODO(michael): fix NA cell padding for missing values!
 #                             CAA_rerand = round( tbl1sub4_cov_un[,"coverage"], round_digits ),
-                            tbl1sub3_cov_un[,-1] )
+                            tbl1sub3_cov_un[,-index_remove] )
 dimnames( tbl1sub_coverage_un )[[2]] <- c("CR", "SBR", "CAA_model", "CAA_rerand", "n", "bZ", "bX", "Pr( Y )", "Pr( X )")
 ```
 
@@ -420,20 +423,22 @@ tbl1sub4_bias_un <- subset( metrics_bybx_sub, select = c( nsim, bias, trial_size
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 1 & adjusted == 0 ) )
 
 #' Table 1a: Coverage (adjusted tx effect)
+index_remove <- which( colnames(tbl1sub3_bias_adj) == "bias" )
 tbl1sub_bias_adj <- cbind( CR = round( tbl1sub1_bias_adj[,"bias"], round_digits ),
                             SBR = round( tbl1sub2_bias_adj[,"bias"], round_digits ),
                             CAA_model = round( tbl1sub3_bias_adj[,"bias"], round_digits ),
                             CAA_rerand = round( tbl1sub4_bias_adj[,"bias"], round_digits ),
-                            tbl1sub3_bias_adj[,-1] )
+                            tbl1sub3_bias_adj[,-index_remove] )
 dimnames( tbl1sub_bias_adj )[[2]] <- c("CR", "SBR", "CAA_model", "CAA_rerand", "n", "bZ", "bX", "Pr( Y )", "Pr( X )")
 
 #' Table 1b: Coverage (adjusted tx effect)
+index_remove <- which( colnames(tbl1sub3_bias_adj) == "bias" )
 tbl1sub_bias_un <- cbind( CR = round( tbl1sub1_bias_un[,"bias"], round_digits ),
                             SBR = round( tbl1sub2_bias_un[,"bias"], round_digits ),
                             CAA_model = round( tbl1sub3_bias_un[,"bias"], round_digits ),
                            CAA_rerand = rep(NA, times = nrow( tbl1sub4_bias_adj )),  # TODO(michael): fix NA cell padding for missing values!
 #                             CAA_rerand = round( tbl1sub4_bias_un[,"bias"], round_digits ),
-                            tbl1sub3_bias_un[,-1] )
+                            tbl1sub3_bias_adj[,-index_remove] )
 dimnames( tbl1sub_bias_un )[[2]] <- c("CR", "SBR", "CAA_model", "CAA_rerand", "n", "bZ", "bX", "Pr( Y )", "Pr( X )")
 ```
 
@@ -458,11 +463,12 @@ tbl1sub4_power_un <- subset( metrics_bybx_sub, select = c( nsim, power.rerand, t
                           subset = ( alloc_method == "CAA-MI-2-PBA-0.70" & rerandomized == 1 & adjusted == 0 ) )
 
 #' Table 1a: Coverage (adjusted tx effect)
+# TODO(michael): fix 'index_remove' for all cases where 'nsim' is added!
 tbl1sub_power_adj <- cbind( CR = round( tbl1sub1_power_adj[,"power.pvalue"], round_digits ),
                             SBR = round( tbl1sub2_power_adj[,"power.pvalue"], round_digits ),
                             CAA_model = round( tbl1sub3_power_adj[,"power.pvalue"], round_digits ),
                             CAA_rerand = round( tbl1sub4_power_adj[,"power.rerand"], round_digits ),
-                            tbl1sub3_power_adj[,-1] )
+                            tbl1sub3_power_adj[,-index_remove] )
 dimnames( tbl1sub_power_adj )[[2]] <- c("CR", "SBR", "CAA_model", "CAA_rerand", "n", "bZ", "bX", "Pr( Y )", "Pr( X )")
 
 #' Table 1b: Coverage (adjusted tx effect)
@@ -686,7 +692,7 @@ tbl2_power <- cbind( tbl2_power_adj_sort[,c(5:8)],
                         CAA_rerand_un = tbl2_power_un_sort[, "CAA_rerand"])
 ```
 
-<!-- BATCH 2 of 4, SUBSETTING ON VALID DRAWS -->
+<!-- BATCH 2 of 4, SUBSETTING ON VALID simulations -->
 ```{r batch-2-subset-binY-contX_coverage, cache = TRUE, echo = FALSE}
 #' Adjusted analysis
 tbl2sub1_cov_adj <- subset( metrics_bycx_sub, select = c( nsim, coverage, trial_size, treatment_assignment_effect_size, prognostic_factor_effect_size, outcome_marginal_prevalence),
@@ -1210,7 +1216,7 @@ kable( caption = .batch.labels[ 3 ], row.names = FALSE,
 ```
 
 \newpage
-### Subsetted simulation results (draws without non-complete separation)
+### Subsetted simulation results (simulations without non-complete separation)
 ```{r batch-1-subset-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl1sub_coverage[, -dim( tbl1sub_coverage )[2]] %>%
 kable( caption = .batch.labels[ 4 ], row.names = FALSE, 
@@ -1244,7 +1250,7 @@ kable( caption = .batch.labels[ 6 ], row.names = FALSE,
 \newpage
 ## Batch 2: Binary outcome (Y), continuous prognostic factors (X) {-}
 ```{r batch-2-table-settings, cache = TRUE, echo = FALSE, results = 'asis'}
-.col.names.b2 = c("n", "bZ", "bX", "Pr( Y )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj");
+.col.names.b2 = c("n", "exp( bZ )", "exp( bX )", "Pr( Y )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj");
 .align.b2 = c(rep("c", 4), rep("r", 6), "c");
 .latex_options.b2 = c("striped", "bordered", "hold_position")
 .header.randomization.method.b2 = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 1);
@@ -1257,7 +1263,7 @@ kable( caption = .batch.labels[ 6 ], row.names = FALSE,
 .linesep = kable_booktabs_linesep( nlines = 6 )
 ```
 
-### Complete simulation results (5010 simulation draws)
+### Complete simulation results (5010 simulations)
 ```{r batch-2-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2_coverage[, -dim( tbl2_coverage )[2]] %>%
 kable( caption = .batch.labels[ 1 ], row.names = FALSE, 
@@ -1288,7 +1294,7 @@ kable( caption = .batch.labels[ 3 ], row.names = FALSE,
 ```
 
 \newpage
-### Subsetted simulation results (draws without non-complete separation)
+### Subsetted simulation results (simulations without non-complete separation)
 ```{r batch-2-subset-coverage-table, cache = TRUE, echo = FALSE, results='asis'}
 tbl2sub_coverage[, -dim( tbl2sub_coverage )[2]] %>%
 kable( caption = .batch.labels[ 4 ], row.names = FALSE, 
@@ -1321,7 +1327,7 @@ kable( caption = .batch.labels[ 6 ], row.names = FALSE,
 \newpage
 ## Batch 3: Continuous outcome (Y), binary prognostic factors (X) {-}
 ```{r batch-3-table-settings, cache = TRUE, echo = FALSE, results = 'asis'}
-.col.names.b3 = c("n", "bZ", "bX", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj");
+.col.names.b3 = c("n", "exp( bZ )", "exp( bX )", "Pr( X )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj");
 .align.b3 = c(rep("c", 4), rep("r", 6), "c");
 .latex_options.b3 = c("striped", "bordered", "hold_position")
 .header.randomization.method.b3 = c(" " = 4, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 1);
@@ -1365,7 +1371,7 @@ kable( caption = .batch.labels[ 3 ], row.names = FALSE,
 \newpage
 ## Batch 4: Continuous outcome (Y), continuous prognostic factors (X) {-}
 ```{r batch-4-table-settings, cache = TRUE, echo = FALSE, results = 'asis'}
-.col.names.b4 = c("n", "bZ", "bX", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj");
+.col.names.b4 = c("n", "exp( bZ )", "exp( bX )", "adj", "unadj", "adj", "unadj", "adj", "unadj", "adj");
 .align.b4 = c(rep("c", 3), rep("r", 6), "c");
 .latex_options.b4 = c("striped", "bordered", "hold_position");
 .header.randomization.method.b4 = c(" " = 3, "CR" = 2, "SBR" = 2, "CAA" = 2, "CAA" = 1);
