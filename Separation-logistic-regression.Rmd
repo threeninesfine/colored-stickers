@@ -82,7 +82,7 @@ We first chose to identify these cases using a threshold standard error of 1000,
 We load in the simulation results from both Batch 1 and 2. 
 Note: these files are large (greater than 1gb in some cases)
 
-```{r load_datasets, cache = TRUE, echo = TRUE}
+```{r load_datasets, cache = TRUE, echo = FALSE}
 library("simulator")
 
 #' [ 'results_directory' contains folder 'files' with .Rdata model, draw, output, evals ] 
@@ -103,18 +103,18 @@ Output is classified by:
   + Covariate adaptive allocation, probability of biased allocation of 0.70 ("CAA-MI-2-PBA-0.70")
   + Covariate adaptive allocation, probability of biased allocation of 1.00 ("CAA-MI-2-PBA-1.00")
 
-```{r output-method-names, cache = TRUE, echo = TRUE}
+```{r output-method-names, cache = TRUE, echo = FALSE}
 #' List of valid output method names
 alloc_method <- c("CR", "SBR", "CAA-MI-2-PBA-0.70", "CAA-MI-2-PBA-1.00");
 analysis_method <- c("REG", "RERAND");
 adjustment <- c("ADJ", "UN")
 
 pastey <- function( ... ){ paste( ..., sep = "_")}
-print(method_names_short <- do.call(pastey, expand.grid( alloc_method[1:3], analysis_method[1], adjustment )))
-print(method_names_rerand <- do.call(pastey, expand.grid( alloc_method[3], analysis_method[2], adjustment )))
-print(method_names_determ <- do.call(pastey, expand.grid( alloc_method[4], analysis_method, adjustment )))
+method_names_short <- do.call(pastey, expand.grid( alloc_method[1:3], analysis_method[1], adjustment ))
+method_names_rerand <- do.call(pastey, expand.grid( alloc_method[3], analysis_method[2], adjustment ))
+method_names_determ <- do.call(pastey, expand.grid( alloc_method[4], analysis_method, adjustment ))
 ###############################################################################
-methods_to_use <- c( method_names_short, method_names_rerand, method_names_determ)
+methods_to_use <- c( method_names_short, method_names_rerand, method_names_determ )
 
 ```
 
@@ -125,7 +125,7 @@ methods_to_use <- c( method_names_short, method_names_rerand, method_names_deter
 We loop through each model in the simulation, processing the results.
 Below is an example where we consider the first model (and loop through the remainder of the models after). 
 Note: each output() call takes at least 120 seconds.
-```{r process-results, eval = TRUE, cache = TRUE, echo = TRUE}
+```{r process-results, eval = TRUE, cache = TRUE, echo = FALSE}
 sim_j <- 1;  # only do the first iteration of the loop
 verbose <- FALSE  # display simulation information as well as runtimes?
 if( verbose ){
@@ -138,8 +138,9 @@ method_names_output <- sapply( output_j, function( .object ){ .object@method_nam
 #' simulation model has these outputs:
 cbind( 1:length( method_names_output ), method_names_output )
 ```
-Converting output objects to data frames (example 1, consider the runtimes!)
-```{r approach-1-output-to-df, eval = FALSE, cache = TRUE, echo = FALSE}
+
+```{r approach-1-output-to-df, eval = TRUE, cache = TRUE, echo = FALSE}
+# Converting output objects to data frames (example 1, consider the runtimes!)
 cat(paste0("Approach 1: Loading output into data frames:\n")); ptm <- proc.time();
 dfs <- list();
 for( out.index in 1:length( output_j )){
@@ -150,8 +151,8 @@ for( out.index in 1:length( output_j )){
 cat(paste0("Success! \nElapsed time: \n")); print( proc.time() - ptm );
 ```
 
-Converting output objects to data frames (approach 2, using matrices)
-```{r approach-2-output-to-df, eval = TRUE, cache = TRUE, echo = TRUE}
+```{r approach-2-output-to-df, eval = TRUE, cache = TRUE, echo = FALSE}
+# Converting output objects to data frames (approach 2, using matrices)
 cat(paste0("Approach 2: Loading output into matrices:\n")); ptm <- proc.time();
 var_labels <- c("est", "se", "t", "p", "adjusted", "rerandomized", "cilower", "ciupper", "num_rerandomizations")
 nsim <- 5010;
@@ -167,20 +168,22 @@ cat(paste0("Success! \nElapsed time: \n")); print( proc.time() - ptm );
 *******************************************************************************
 
 # Processing Results: Model 1, Output 1
-```{r evaluate-output-mod-1-out-1, eval = TRUE, cache = TRUE, echo = TRUE}
+```{r evaluate-output-mod-1-out-1, eval = TRUE, cache = TRUE, echo = FALSE}
 out.index = 1; # considering output 1 
-# Here are the simulation conditions (settings) for model 1, output 1:
+cat("Here are the simulation conditions (settings) for model 1, output 1:") 
 unlist(model( batch1 )[[1]]@params)
-# Here is the method name for model 1, output 1:
+cat("Here is the method name for model 1, output 1:") 
 method_names_output[ out.index ]
-# Note that outcome_marginal_prevalence = 0.10 & trial_size = 32
+cat("Note that outcome_marginal_prevalence = 0.10 & trial_size = 32") 
 outmatrix <- outmats[[ out.index ]]
-# Here are first several rows
+cat("Here are first several rows") 
 head( outmatrix )
 ```
+
 For instance, rows 3 and 6 have large estimates and standard errors.
 We plot estimates vs. SEs to identify any trends.
-```{r fig-est-vs-se, eval = TRUE, cache = TRUE, echo = TRUE}
+
+```{r fig-est-vs-se, eval = TRUE, cache = TRUE, echo = FALSE}
 # plot ests vs. SEs without any classifiers
 plot( outmatrix[,"est"], outmatrix[,"se"], xlab = "Estimate", ylab = "Standard Error (SE)",
                     main = paste0("Estimates vs. SEs, logistic regression \nModel 1, Output: ", 
@@ -190,15 +193,19 @@ plot( outmatrix[,"est"], outmatrix[,"se"], xlab = "Estimate", ylab = "Standard E
 Using the previous method of excluding simulation conditions where the standard errors were greater than 1000, 
 this classifier fails to identify simulations with estimates greater than 40 in both directions, but with small SEs.
 What are these points, and what simulated outcomes (and predictors) do they correspond to?
-```{r fig-est-vs-se-colored-scatter, eval = TRUE, cache = TRUE, echo = TRUE}
+
+```{r fig-est-vs-se-colored-scatter, eval = TRUE, cache = TRUE, echo = FALSE}
+out.index = 1
 # TODO( michael ): plot estimates vs. SEs using 'SE greater than 1k' classifier
 plot( outmatrix[, "est"], outmatrix[, "se"], xlab = "Estimate", ylab = "Standard Error (SE)",
       col = ifelse( outmatrix[, "se"] > 1000, "red", "black"),
       main = paste0("Estimates vs. SEs, logistic regression \nModel 1, Output: ", method_names_output[ out.index ]))
 
 classifier_1 <- outmatrix[, "se"] > 1000;
+cat("Mean number of simulations removed under classifier 1 (SE > 1000):")
 mean( classifier_1 )
 classifier_2 <- outmatrix[, "se"] > 1000 | abs( outmatrix[, "est"] ) > 40;
+cat("Mean number of simulations removed under classifier 2 (SE > 1000 | abs(est) > 40):")
 mean( classifier_2 )
 class2_newpoints <- which( classifier_2 & ! classifier_1 ) 
 cols.classifier <- ifelse( outmatrix[, "se"] > 1000, "red",
@@ -214,8 +221,41 @@ legend("topright", legend = c("SE less than 1000, abs(est) greater than 40",
        col = c("red", "blue", "black"), pch = 16)
 ```
 
+What do these simulations correspond to?
+
+```{r back-to-simulations-small-se-big-ests, eval = TRUE, cache = TRUE, echo = TRUE}
+# Get the indices of the simulations
+classifier_1 <- outmatrix[, "se"] > 1000;
+class1_points <- which( classifier_1 )
+## P
+mean( classifier_1 )
+classifier_2 <- outmatrix[, "se"] > 1000 | abs( outmatrix[, "est"] ) > 40;
+mean( classifier_2 )
+class2_newpoints <- which( classifier_2 & ! classifier_1 )
+
+
+
+# Extract the corresponding simulations with the outcome measures
+sims_batch1 <- output( batch1, methods = "CR" )[[1]]
+
+for( index in class2_newpoints[1:10] ){
+print( with( sims_batch1@out[[ index ]], table(Z, Y)) )
+}
+
+## Example draw with est > 40 and SE < 1k
+with( sims_batch1@out[[ class2_newpoints[1] ]], table(Z, Y))
+## Example draw with est < 40 and SE > 1k
+with( sims_batch1@out[[ class1_points[1] ]], table(Z, Y))
+
+# What accounts for the difference? 
+# Maybe: look at the prognostic factors (X)
+
+```
+
+Not sure how to distinguish between the two cases (any input appreciated)
+*******************************************************************************
       
-```{r fig-est-vs-se-colored-hist, eval = TRUE, cache = TRUE, echo = TRUE}
+```{r fig-est-vs-se-colored-hist, eval = FALSE, cache = TRUE, echo = FALSE}
 
 
 h1 <- hist( outmatrix[ classifier_1 , "est"], plot=FALSE )
@@ -234,120 +274,4 @@ lines(h2, col="blue")
 
 
 *******************************************************************************
-
-
-# Introduction
-Simulation results are presented by outcome and predictor variable type pairs (binary, continuous).
-
-Each outcome/predictor pair, we present tables on: 
-
-* coverage probability, 
-* bias, and 
-* power.
-
-Simulation conditions are ordered by:
-
-* sample size (n), 
-* marginal outcome prevalence Pr( Y ),
-* prognostic factor prevalence Pr( X ),
-* treatment effect size (bZ), and
-* prognostic factor effect size (bX).
-
-Binary outcomes are fit with a Binomial generalized linear model, continuous outomes with an ordinary linear model.
-
-Resulting estimates of treatment effect are adjusted ('adj') or unadjusted ('unadj') for prognostic factors used in the allocation method.
-
-Three allocation methods are compared to each other:
-
-* Complete randomization (CR),
-* Stratified block randomization (SBR), with a block size of 4,
-* Covariate adaptive allocation (CAA), with a maximum imbalance of 2 and an allocation biasing probability of 0.70.
-
-The analysis method for uncertainty estimates is either:
-
-* Model-based (using p-values from relevant t-statistics), or
-* Rerandomization-based, with 500 rerandomized treatment allocations performed per simulation draw.
-
-# Comments
-Suggested modifications:
-
-* Order simulation conditions in sort order, i.e. columns from left to right should go: n, Pr(Y), Pr(X), ...
-* Investigate issue with large positive biases
-* Correct issue with scientific notation (suspect it may have to do with high bias (see previous)
-* For batches 1 and 2, present complete and subsetted metric table side by side / sequentially (rather than currently: complete results, then subsetted results)
-\newpage
-
-# Comments from Amalia (NEW: 18 July 2018)
-
-OK, fantastic, here are some thoughts on this version.  Try to refer to this email as a checklist and go through each one.
-
-For formatting,
-
-1. Number the tables based on batch number (1a 1b, etc) so can tell where you are in the types of outcomes.
-
-ref1: https://stackoverflow.com/questions/31182147/suppress-automatic-table-name-and-number-in-an-rmd-file-using-xtable-or-knitr
-ref2: https://stackoverflow.com/questions/30679537/get-rid-of-captions-when-using-texreg-in-rmarkdown
-```
-In the YAML section where LaTeX packages can be included, 
-add the caption package:
-
-header-includes:
-    - \usepackage{caption}
-Then at the beginning of the RMarkdown document body add:
-
-\captionsetup[table]{labelformat=empty}
-This removes the caption labels for all tables.
-```
-
-2. Include the proportion of runs included in each row of the tables where you include only draws without non-complete separation
-
-3. Some tables still need scientific notation taken out of the extra large or small numbers.  If #s too big, perhaps can use >999 or something
-
-4. I like the row spacing used to split up the vertical space, you have used every 5 rows, but perhaps split where something changes to make more coherent groups, perhaps every 6 rows where the value of P(X) or P(Y) changes.  Even batch 4 could put a vertical space every 6 rows since sample size changes.
-
-```
-You can add the argument linesep = "" to kable. 
-This will be passed on to kable_latex where it overwrites the default
-
-linesep = if (booktabs) c('', '', '', '', '\\addlinespace') else '\\hline'
-# Example:
-
-kable(cars, format = "latex", booktabs = TRUE, linesep = "")
-```
-Made a function that outputs a formatted string for 'linesep' argument, with the given number of lines per separation:
-```{r}
-# function kable_booktabs_linesep()
-kable_booktabs_linesep <- function( nlines = 6 ){
-  #' input: 
-  #'   nlines := number of lines per block of table rows
-  #' output:
-  #'   [character] linespace string to pass to kable()
-  #' example:
-  #'   kable( foo_table, booktabs = TRUE, linesep = kable_booktabs_linesep( nlines = 6) )
-  return(c(rep( '', nlines - 1 ), "\\addlinespace"))
-}
-```
-
-5. Sometimes the columns at the right have NA and sometimes just 0 or 1.  I’m assuming when it’s just 0 or 1 that those have not finished running yet, right?
-
-6. Remove far right column for rerandomized and unadjusted.  Do not run these, not part of our aims.
-
-7. Something seems amiss with table 11, some of the columns match exactly.
-
-8. Tables 11 and 12 both say ‘bias’ in heading, but I think second one should be power?
-
-
-For inference,
-
-9. We need to be able to interpret the bias.  So each table should include the true value that was compared to the estimates to compute bias.  I think when we sat down this was log(bZ), not bZ, right? 
-
-10. Here is what I’m seeing in terms of patterns:  Coverage and bias seem potentially reasonable, waiting for some precision, hard to see. 
-
-11. So focusing on power, which is our main objective.  Seems to me that there is actually a benefit in terms of power for re-randomization even in the absence of drift for binary Y; this is seen when comparing CAA rerand adj vs CAA model-based adj. 
-
-12. Secondly with regard to power, when comparing the model based adjusted methods only and ignoring rerandomization, there seems to be no power advantage to using covariate adjusted randomization versus either block or simple randomization.  Do you agree?  Fascinating.
-
-13. How it is going with the other simulations not shown here, batches 1 and 2 with n=96?  Are they running?
-
-
 
