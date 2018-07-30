@@ -72,10 +72,26 @@ metrics_cybx <- read.csv(paste0( datadir_path, "metrics-alloc-simulation-batch-3
 #' [ Batch 4 of 4: continuous Y, continuous X ] 
 metrics_cycx <- read.csv(paste0( datadir_path, "metrics-alloc-simulation-batch-4-of-4.csv" ))
 
+datadir_path_new <- "/Users/Moschops/Documents/MSThesis/results-NEW/"
 #' [ Batch 1 of 4: binary Y, binary X -- subsetted on simulations without complete/quasi separation ]
 metrics_bybx_sub <- read.csv(paste0( datadir_path, "metrics-subset-alloc-simulation-batch-1-of-4.csv" ))
 #' [ Batch 2 of 4: binary Y, continuous X -- subsetted on simulations without complete/quasi separation ]
 metrics_bycx_sub <- read.csv(paste0( datadir_path, "metrics-subset-alloc-simulation-batch-2-of-4.csv" ))
+
+
+#' [ Batch 1 of 4: binary Y, binary X -- subsetted on simulations without complete/quasi separation ]
+metrics_bybx_sub_new <- read.csv(paste0( datadir_path_new, "metrics-subset-alloc-simulation-batch-1-of-4.csv" ))
+#' [ Batch 2 of 4: binary Y, continuous X -- subsetted on simulations without complete/quasi separation ]
+metrics_bycx_sub_new <- read.csv(paste0( datadir_path_new, "metrics-subset-alloc-simulation-batch-2-of-4.csv" ))
+
+with( metrics_bybx, summary( bias ))
+with( metrics_bybx_sub, summary( bias ))
+with( metrics_bybx_sub_new, summary( bias ))
+with( metrics_bycx, summary( bias ))
+with( metrics_bycx_sub, summary( bias ))
+with( metrics_bycx_sub_new, summary( bias ))
+
+
 ```
 
 # Introduction
