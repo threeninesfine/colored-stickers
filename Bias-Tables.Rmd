@@ -88,7 +88,7 @@ metrics_bycx_sub_new <- read.csv(paste0( datadir_path_new, "metrics-subset-alloc
 # Introduction
 Simulation results are presented by outcome and predictor variable type pairs (binary, continuous).
 
-Each outcome/predictor pair, we present tables on: 
+Each outcome/predictor pair, we present tables for:
 
 * coverage probability, 
 * bias, and 
